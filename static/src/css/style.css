@@ -1,0 +1,21 @@
+
+
+.openerp .oe_form_sheetbg {
+    padding: 16px 0;
+    max-width: none !important;
+}
+.openerp .oe_form_sheet_width_wider {
+    max-width: 95%;
+}
+
+.oe_list_field_float{
+    white-space: nowrap !important;
+}
+
+.openerp .oe_list_content td.oe_number{
+    white-space: nowrap !important;
+}
+
+.openerp .announcement_bar {
+    display:none;
+}

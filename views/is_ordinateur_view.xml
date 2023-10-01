@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!-- Partage -->
+        <record id="is_partage_form_view" model="ir.ui.view">
+            <field name="name">is_partage_from_view</field>
+            <field name="model">is.partage</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_partage_tree_view">
+            <field name="name">is_partage_tree_view</field>
+            <field name="model">is.partage</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_partage_search_view" model="ir.ui.view">
+            <field name="name">is_partage_search_view</field>
+            <field name="model">is.partage</field>
+            <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+            </search>
+            </field>
+        </record>
+        <record id="is_partage_action" model="ir.actions.act_window">
+            <field name="name">Partages</field>
+            <field name="res_model">is.partage</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!-- Bureau -->
+        <record id="is_bureau_form_view" model="ir.ui.view">
+            <field name="name">is_bureau_from_view</field>
+            <field name="model">is.bureau</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="commentaire" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_bureau_tree_view">
+            <field name="name">is_bureau_tree_view</field>
+            <field name="model">is.bureau</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="commentaire" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_bureau_search_view" model="ir.ui.view">
+            <field name="name">is_bureau_search_view</field>
+            <field name="model">is.bureau</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="commentaire" />
+                </search>
+            </field>
+        </record>
+        <record id="is_bureau_action" model="ir.actions.act_window">
+            <field name="name">Bureau</field>
+            <field name="res_model">is.bureau</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <!-- Type d'ordinateur -->
+        <record id="is_type_ordinateur_form_view" model="ir.ui.view">
+            <field name="name">is_type_ordinateur_from_view</field>
+            <field name="model">is.type.ordinateur</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="commentaire" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_type_ordinateur_tree_view">
+            <field name="name">is_type_ordinateur_tree_view</field>
+            <field name="model">is.type.ordinateur</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="commentaire" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_type_ordinateur_search_view" model="ir.ui.view">
+            <field name="name">is_type_ordinateur_search_view</field>
+            <field name="model">is.type.ordinateur</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="commentaire" />
+                </search>
+            </field>
+        </record>
+        <record id="is_type_ordinateur_action" model="ir.actions.act_window">
+            <field name="name">Type d'ordinateur</field>
+            <field name="res_model">is.type.ordinateur</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <!-- Ordinateur -->
+        <record id="is_ordinateur_form_view" model="ir.ui.view">
+            <field name="name">is_ordinateur_from_view</field>
+            <field name="model">is.ordinateur</field>
+            <field name="arch" type="xml">
+                <form>
+                    <!-- <header>
+                        <button 
+                            name="actualiser_glpi_action"
+                            string="Actualiser depuis GLPI"
+                            type="object"
+                        />
+                    </header> -->
+                    <sheet class="oe_form_sheet_width_wider">
+                        <group>
+                            <group>
+                                <field name="site_id" />
+                                <field name="name" />
+                                <field name="type_ordinateur_id" />
+                                <field name="bureau_id" />
+                                <field name="service_id" />
+                                <field name="utilisateur_id" />
+                                <field name="date_achat" />
+                            </group>
+                            <group>
+                                <field name="partage_ids"  widget="many2many_tags"/>
+                                <field name="partage_nb"          invisible="1"/>
+                                <field name="suivi_sauvegarde_nb" invisible="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="commentaire" />
+                        </group>
+                        <notebook>
+                            <page string="Actions" attrs="{'invisible': [('action_ids', '=', [])]}">
+                                <group>
+                                    <field name="action_ids" nolabel="1">
+                                        <tree>
+                                            <button string="Accèder à l'action" name="acceder_action" type="object" icon="gtk-zoom-in" />
+                                            <field name="name" />
+                                            <field name="utilisateur_id"  widget="many2one_clickable"/>
+                                            <field name="date_creation" />
+                                            <field name="date_prevue" />
+                                            <field name="date_realisee" />
+                                            <field name="commentaire" />
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Sauvegardes Mozilla" attrs="{'invisible': [('partage_nb', '=', 0)]}">
+                                <group>
+                                    <field name="sauvegarde_ids" nolabel="1">
+                                        <tree>
+                                            <!-- <button string="Accèder à la sauvegarde" name="acceder_sauvegarde" type="object" icon="gtk-zoom-in" /> -->
+                                            <field name="date" />
+                                            <field name="partage" />
+                                            <field name="taille" />
+                                            <field name="nb_modifs" />
+                                            <field name="temps" />
+                                            <field name="resultat" />
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Suivi des sauvegardes" attrs="{'invisible': [('suivi_sauvegarde_nb', '=', 0)]}">
+                                <group>
+                                    <field name="suivi_sauvegarde_ids" nolabel="1">
+                                        <tree>
+                                            <button string="Accèder au suivi" name="acceder_suivi_sauvegarde" type="object" icon="gtk-zoom-in" />
+                                            <field name="date" />
+                                            <field name="resultat" />
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="GLPI" attrs="{'invisible': [('glpi_name', '=', False)]}">
+                                <group>
+                                    <field name="glpi_date_mod"/>
+                                    <!-- <field name="glpi_bios_date"/> -->
+                                    <!-- <field name="glpi_installationdate" /> -->
+                                    <field name="glpi_name"/>
+                                    <field name="glpi_remote_addr"/>
+                                    <field name="glpi_adresse_ip_mac"/>
+                                    <!-- <field name="glpi_operatingsystems"/> -->
+                                    <!-- <field name="glpi_contact"/> -->
+                                    <!-- <field name="glpi_winowner"/> -->
+                                    <field name="glpi_serial"/>
+                                    <!-- <field name="glpi_os_license_number"/> -->
+                                    <!-- <field name="glpi_os_licenseid"/> -->
+                                </group>
+                            </page>
+
+                            <page string="net rpc" attrs="{'invisible': [('net_rpc_admins', '=', False)]}">
+                                <group>
+                                    <field name="net_rpc_partages" />
+                                    <field name="net_rpc_admins" />
+                                    <field name="net_rpc_users" />
+                                </group>
+                            </page>
+                        </notebook>
+                        <group>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_ordinateur_tree_view">
+            <field name="name">is_ordinateur_tree_view</field>
+            <field name="model">is.ordinateur</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="site_id" />
+                    <field name="name" />
+                    <field name="type_ordinateur_id" />
+                    <field name="glpi_remote_addr"/>
+                    <field name="bureau_id" />
+                    <field name="service_id" />
+                    <field name="utilisateur_id" />
+                    <field name="glpi_date_mod"/>
+                    <!-- <field name="date_achat" /> -->
+                    <!-- <field name="glpi_bios_date" /> -->
+                    <!-- <field name="glpi_installationdate" /> -->
+                    <!-- <field name="glpi_operatingsystems"/> -->
+                    <!-- <field name="glpi_winowner"/> -->
+                    <field name="commentaire" invisible="context.get('commentaire',True)"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_ordinateur_search_view" model="ir.ui.view">
+            <field name="name">is_ordinateur_search_view</field>
+            <field name="model">is.ordinateur</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="site_id" />
+                    <field name="name" />
+                    <field name="type_ordinateur_id" />
+                    <field name="bureau_id" />
+                    <field name="service_id" />
+                    <field name="utilisateur_id" />
+                    <field name="commentaire" />
+                    <filter string="Site"              name="group_by_site_id"                context="{'group_by':'site_id'}"/>
+                    <filter string="Type d'ordinateur" name="group_by_type_ordinateur_id"     context="{'group_by':'type_ordinateur_id'}"/>
+                    <filter string="Bureau"            name="group_by_bureau_id"              context="{'group_by':'bureau_id'}"/>
+                    <filter string="Service"           name="group_by_service_id"             context="{'group_by':'service_id'}"/>
+                    <filter string="Système"           name="group_by_glpi_operatingsystems"  context="{'group_by':'glpi_operatingsystems'}"/>
+                 </search>
+            </field>
+        </record>
+        <record id="is_ordinateur_action" model="ir.actions.act_window">
+            <field name="name">Ordinateurs</field>
+            <field name="res_model">is.ordinateur</field>
+            <field name="view_mode">tree,form</field>
+            <field name="limit">200</field>
+        </record>
+
+
+        <!-- Actualiser depuis GLPI -->
+        <record id="actualiser_glpi_action_server" model="ir.actions.server">
+             <field name="name">Actualiser depuis GLPI</field>
+            <field name="model_id" ref="model_is_ordinateur"/>
+            <field name="code">action = self.actualiser_glpi_action(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+        <!-- <record id="actualiser_glpi_action_ir_value" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'is.ordinateur'" name="model"/>
+            <field name="name">Actualiser depuis GLPI</field>
+            <field eval="'ir.actions.server,%d'%actualiser_glpi_action_server" name="value"/>
+        </record> -->
+
+
+        <!-- Lancement automatisé actualisation GLPI -->
+        <!-- <record forcecreate="True" id="actualiser_glpi_scheduler_action" model="ir.cron">
+            <field name="name">Actualiser depuis GLPI</field>
+            <field name="active" eval="True" />
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'is.ordinateur'" name="model"/>
+            <field eval="'actualiser_glpi_scheduler_action'" name="function"/>
+            <field eval="'(True,)'" name="args"/>
+        </record> -->
+
+        <record id="actualiser_glpi_scheduler_action" model="ir.cron">
+            <field name="name">Actualiser depuis GLPI</field>
+            <field name="model_id" ref="model_is_ordinateur"/>
+            <field name="state">code</field>
+            <field name="code">model.actualiser_glpi_scheduler_action()</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+
+
+    </data>
+</odoo>

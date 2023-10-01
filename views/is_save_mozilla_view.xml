@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_save_mozilla_form_view" model="ir.ui.view">
+            <field name="name">is_save_mozilla_from_view</field>
+            <field name="model">is.save.mozilla</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button 
+                            name="mail_anomalie_sauvegarde_action"
+                            string="Anomalies sauvegardes"
+                            type="object"
+                        />
+                        <button 
+                            name="mail_anomalie_tps_sauvegarde_action"
+                            string="Anomalies tps sauvegardes"
+                            type="object"
+                        />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date" />
+                                <field name="site_id" />
+                                <field name="service_id" />
+                                <field name="ordinateur_id" />
+                                <field name="utilisateur_id" />
+                                <field name="mail" />
+                            </group>
+                            <group>
+                                <field name="partage" />
+                                <field name="taille" />
+                                <field name="nb_modifs" />
+                                <field name="heure_debut" />
+                                <field name="heure_fin" />
+                                <field name="temps" />
+                            </group>
+                        </group>
+                        <group>
+                            <field name="resultat" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_save_mozilla_tree_view">
+            <field name="name">is_save_mozilla_tree_view</field>
+            <field name="model">is.save.mozilla</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="date" />
+                    <field name="site_id" />
+                    <field name="service_id" />
+                    <field name="ordinateur_id" />
+                    <field name="utilisateur_id" />
+                    <field name="mail" />
+                    <field name="partage" />
+                    <field name="taille" />
+                    <field name="nb_modifs" />
+                    <field name="heure_debut" />
+                    <field name="heure_fin" />
+                    <field name="temps" />
+                    <field name="resultat" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_save_mozilla_search_view" model="ir.ui.view">
+            <field name="name">is_save_mozilla_search_view</field>
+            <field name="model">is.save.mozilla</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="date" />
+                    <field name="site_id" />
+                    <field name="service_id" />
+                    <field name="ordinateur_id" />
+                    <field name="utilisateur_id" />
+                    <field name="mail" />
+                    <field name="partage" />
+                    <field name="heure_debut" />
+                    <field name="resultat" />
+                    <filter string="Ce jour" name="ce_jour" domain="[('date','=',context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Hier"    name="hier"    domain="[('date','=',(context_today()+datetime.timedelta(days=-1)).strftime('%Y-%m-%d'))]"/>
+                        <filter string="Site"             name="group_by_site_id" context="{'group_by':'site_id'}"/>
+                        <filter string="Service"          name="group_by_service_id" context="{'group_by':'service_id'}"/>
+                        <filter string="Ordinateur"       name="group_by_ordinateur_id" context="{'group_by':'ordinateur_id'}"/>
+                        <filter string="Utilisateur"      name="group_by_utilisateur_id" context="{'group_by':'utilisateur_id'}"/>
+                        <filter string="Date de début"    name="group_by_heure_debut" context="{'group_by':'heure_debut'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="is_save_mozilla_pivot_view" model="ir.ui.view">
+             <field name="name">is_save_mozilla_pivot_view</field>
+            <field name="model">is.save.mozilla</field>
+             <field name="arch" type="xml">
+                 <pivot>
+                     <field name="ordinateur_id" type="row"/>
+                     <field name="nb_modifs"     type="measure"/>
+                 </pivot>
+             </field>
+        </record>
+
+
+        <record id="is_save_mozilla_action" model="ir.actions.act_window">
+            <field name="name">Sauvegarde Mozilla</field>
+            <field name="res_model">is.save.mozilla</field>
+            <field name="view_mode">tree,form,pivot</field>
+        </record>
+
+
+
+        <!-- Envoi en automatique des anomalies mozilla par mail -->
+        <!--
+        <record forcecreate="True" id="mail_anomalie_sauvegarde_scheduler_action" model="ir.cron">
+            <field name="name">Envoi en automatique des anomalies mozilla par mail</field>
+            <field name="active" eval="True" />
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field> 
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'is.save.mozilla'" name="model"/>
+            <field eval="'mail_anomalie_sauvegarde_scheduler_action'" name="function"/>
+            <field eval="'(True,)'" name="args"/>
+        </record>
+        -->
+
+        <!-- Envoi en automatique des anomalies de temps de sauvegarde par mail -->
+        <!--
+        <record forcecreate="True" id="mail_anomalie_tps_sauvegarde_scheduler_action" model="ir.cron">
+            <field name="name">Envoi en automatique des anomalies de temps de sauvegarde par mail</field>
+            <field name="active" eval="True" />
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'is.save.mozilla'" name="model"/>
+            <field eval="'mail_anomalie_tps_sauvegarde_scheduler_action'" name="function"/>
+            <field eval="'(True,)'" name="args"/>
+        </record>
+        -->
+
+
+
+    </data>
+</odoo>

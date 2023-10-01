@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_suivi_sauvegarde_form_view" model="ir.ui.view">
+            <field name="name">is_suivi_sauvegarde_from_view</field>
+            <field name="model">is.suivi.sauvegarde</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="date" />
+                            <field name="ordinateur_id" />
+                            <field name="site_id" />
+                            <field name="resultat" />
+                            <field name="logs" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_suivi_sauvegarde_tree_view">
+            <field name="name">is_suivi_sauvegarde_tree_view</field>
+            <field name="model">is.suivi.sauvegarde</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="date" />
+                    <field name="ordinateur_id" />
+                    <field name="site_id" />
+                    <field name="resultat" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_suivi_sauvegarde_search_view" model="ir.ui.view">
+            <field name="name">is_suivi_sauvegarde_search_view</field>
+            <field name="model">is.suivi.sauvegarde</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="date" />
+                    <field name="ordinateur_id" />
+                    <field name="site_id" />
+                    <field name="resultat" />
+                </search>
+            </field>
+        </record>
+        <record id="is_suivi_sauvegarde_action" model="ir.actions.act_window">
+            <field name="name">Suivi des sauvegardes</field>
+            <field name="res_model">is.suivi.sauvegarde</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

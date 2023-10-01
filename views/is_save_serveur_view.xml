@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_save_serveur_form_view" model="ir.ui.view">
+            <field name="name">is_save_serveur_from_view</field>
+            <field name="model">is.save.serveur</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date" />
+                                <field name="site_id" />
+                                <field name="ordinateur_id" />
+                            </group>
+                            <group>
+                                <field name="heure_debut" />
+                                <field name="heure_fin" />
+                                <field name="temps" />
+                                <field name="nb_anomalies" />
+                            </group>
+                        </group>
+                        <group>
+                            <field name="resultat" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_save_serveur_tree_view">
+            <field name="name">is_save_serveur_tree_view</field>
+            <field name="model">is.save.serveur</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="date" />
+                    <field name="site_id" />
+                    <field name="ordinateur_id" />
+                    <field name="heure_debut" />
+                    <field name="heure_fin" />
+                    <field name="temps" />
+                    <field name="nb_anomalies" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_save_serveur_search_view" model="ir.ui.view">
+            <field name="name">is_save_serveur_search_view</field>
+            <field name="model">is.save.serveur</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="date" />
+                    <field name="site_id" />
+                    <field name="ordinateur_id" />
+                    <field name="heure_debut" />
+                    <field name="resultat" />
+                    <filter string="Ce jour" name="ce_jour" domain="[('date','=',context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Hier"    name="hier"    domain="[('date','=',(context_today()+datetime.timedelta(days=-1)).strftime('%Y-%m-%d'))]"/>
+                        <filter string="Site"          name="group_by_site_id"     context="{'group_by':'site_id'}"/>
+                        <filter string="Ordinateur"    name="group_by_ordinateur_id"     context="{'group_by':'ordinateur_id'}"/>
+                        <filter string="Date de début" name="group_by_heure_debut"     context="{'group_by':'heure_debut'}"/>
+                </search>
+            </field>
+        </record>
+        <record id="is_save_serveur_action" model="ir.actions.act_window">
+            <field name="name">Sauvegarde serveur</field>
+            <field name="res_model">is.save.serveur</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

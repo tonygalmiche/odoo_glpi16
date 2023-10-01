@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_action_form_view" model="ir.ui.view">
+            <field name="name">is_action_from_view</field>
+            <field name="model">is.action</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet class="oe_form_sheet_width_wider">
+                        <group>
+                            <field name="action_globale_id" />
+                            <field name="name" />
+                            <field 
+                                name="ordinateur_id"
+                                on_change="ordinateur_id_on_change(ordinateur_id,utilisateur_id)" 
+                            />
+                            <field 
+                                name="utilisateur_id"
+                                on_change="utilisateur_id_on_change(ordinateur_id,utilisateur_id)" 
+                            />
+                            <field name="site_id" />
+                            <field name="service_id" />
+                            <field name="mail" />
+                            <field name="date_creation" />
+                            <field name="date_prevue" />
+                            <field name="tps_prevu" widget="float_time" readonly="1" />
+                            <field name="date_realisee" />
+                            <field name="tps_passe" widget="float_time"/>
+                            <field name="commentaire" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_action_tree_view">
+            <field name="name">is_action_tree_view</field>
+            <field name="model">is.action</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+
+                <!-- colors="red:date_prevue &lt; current_date and date_realisee==False; grey:date_realisee not null;" -->
+                <tree>
+                    <field name="action_globale_id"  widget="many2one_clickable"/>
+                    <field name="name" />
+                    <field name="ordinateur_id"      widget="many2one_clickable"/>
+                    <field name="utilisateur_id"     widget="many2one_clickable"/>
+                    <field name="site_id" />
+                    <field name="service_id"/>
+                    <field name="mail" />
+                    <field name="date_creation" />
+                    <field name="date_prevue" />
+                    <field name="tps_prevu" widget="float_time" sum="Total"/>
+                    <field name="date_realisee" />
+                    <field name="tps_passe" widget="float_time" sum="Total"/>
+                    <field name="commentaire" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_action_search_view" model="ir.ui.view">
+            <field name="name">is_action_search_view</field>
+            <field name="model">is.action</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="action_globale_id" />
+                    <field name="name" />
+                    <field name="ordinateur_id" />
+                    <field name="utilisateur_id" />
+                    <field name="site_id" />
+                    <field name="service_id" />
+                    <field name="date_creation" />
+                    <field name="date_prevue" />
+                    <field name="date_realisee" />
+                    <field name="commentaire" />
+
+                    <filter string="Fait"         name="fait"         domain="[('date_realisee','!=',False)]"/>
+                    <filter string="Fait ce jour" name="fait_ce_jour" domain="[('date_realisee','=',context_today().strftime('%Y-%m-%d'))]"/>
+                    <filter string="Fait hier"    name="fait_hier"    domain="[('date_realisee','=',(context_today()+datetime.timedelta(days=-1)).strftime('%Y-%m-%d'))]"/>
+                    <filter string="A Faire"      name="a_faire"      domain="[('date_realisee','=',False)]"/>
+
+                    <filter string="Action globale"   name="group_by_action_globale_id" context="{'group_by':'action_globale_id'}"/>
+                    <filter string="Ordinateur"       name="group_by_ordinateur_id"     context="{'group_by':'ordinateur_id'}"/>
+                    <filter string="Utilisateur"      name="group_by_utilisateur_id"    context="{'group_by':'utilisateur_id'}"/>
+                    <filter string="Service"          name="group_by_service_id"        context="{'group_by':'service_id'}"/>
+                    <filter string="Date prévue"      name="group_by_date_prevue"       context="{'group_by':'date_prevue'}"/>
+                    <filter string="Date réalisé"     name="group_by_date_realisee"     context="{'group_by':'date_realisee'}"/>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="is_tps_passe_par_jour_pivot_view" model="ir.ui.view">
+            <field name="name">is_tps_passe_par_jour_pivot_view</field>
+            <field name="model">is.action</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="date_realisee" type="row" interval="day"/>
+                    <field name="tps_prevu" type="measure"/>
+                    <field name="tps_passe" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+
+        <record id="is_action_action" model="ir.actions.act_window">
+            <field name="name">Actions</field>
+            <field name="res_model">is.action</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="context">{'search_default_a_faire':1}</field>
+        </record>
+
+
+        <!-- Actualiser service -->
+        <record id="actualiser_service_action_server" model="ir.actions.server">
+             <field name="name">Actualiser service</field>
+            <field name="model_id" ref="model_is_action"/>
+            <field name="code">action = self.actualiser_service_action(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+        <!-- <record id="actualiser_service_action_ir_value" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'is.action'" name="model"/>
+            <field name="name">Actualiser service</field>
+            <field eval="'ir.actions.server,%d'%actualiser_service_action_server" name="value"/>
+        </record> -->
+
+
+
+
+        <!-- Actualiser service -->
+        <record id="solder_action_action_server" model="ir.actions.server">
+             <field name="name">Solder l'action</field>
+            <field name="model_id" ref="model_is_action"/>
+            <field name="code">action = self.solder_action_action(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+        <!-- <record id="solder_action_action_ir_value" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'is.action'" name="model"/>
+            <field name="name">Solder l'action</field>
+            <field eval="'ir.actions.server,%d'%solder_action_action_server" name="value"/>
+        </record> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </data>
+</odoo>

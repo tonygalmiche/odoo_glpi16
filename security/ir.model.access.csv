@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_is_ordinateur,access_is_ordinateur,model_is_ordinateur,base.group_user,1,1,1,0
+access_is_utilisateur,access_is_utilisateur,model_is_utilisateur,base.group_user,1,1,1,0
+access_is_action,access_is_action,model_is_action,base.group_user,1,1,1,0
+access_is_action_globale,access_is_action_globale,model_is_action_globale,base.group_user,1,1,1,0
+access_is_site,access_is_site,model_is_site,base.group_user,1,1,0,0
+access_is_service,access_is_service,model_is_service,base.group_user,1,0,0,0
+access_is_identifiant,access_is_identifiant,model_is_identifiant,base.group_user,1,1,1,0
+access_is_save_mozilla,access_is_save_mozilla,model_is_save_mozilla,base.group_user,1,0,0,0
+access_is_partage,access_is_partage,model_is_partage,base.group_user,1,0,0,0
+access_is_bureau,access_is_bureau,model_is_bureau,base.group_user,1,1,1,0
+access_is_type_ordinateur,access_is_type_ordinateur,model_is_type_ordinateur,base.group_user,1,0,0,0
+access_is_suivi_sauvegarde,access_is_suivi_sauvegarde,model_is_suivi_sauvegarde,base.group_user,1,1,1,0
+access_is_save_serveur,access_is_save_serveur,model_is_save_serveur,base.group_user,1,0,0,0
+access_is_equipement_reseau,access_is_equipement_reseau,model_is_equipement_reseau,base.group_user,1,1,1,0
+access_is_pureftp,access_is_pureftp,model_is_pureftp,base.group_user,1,1,1,0
+access_is_logiciel,access_is_logiciel,model_is_logiciel,base.group_user,1,1,1,1

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <menuitem id="is_glpi_main_menu"         sequence="1"  name="GLPI"/>
+        <menuitem id="is_glpi_menu"              sequence="10" name="GLPI"               parent="is_glpi_main_menu"/>
+        <menuitem id="is_utilisateur_menu"       sequence="10" name="Utilisateurs"       parent="is_glpi_menu" action="is_utilisateur_action" />
+        <menuitem id="is_ordinateur_menu"        sequence="20" name="Ordinateurs"        parent="is_glpi_menu" action="is_ordinateur_action" />
+        <menuitem id="is_logiciel_menu"          sequence="25" name="Logiciels"          parent="is_glpi_menu" action="is_logiciel_action" />
+        <menuitem id="is_equipement_reseau_menu" sequence="30" name="Equipement réseau"  parent="is_glpi_menu" action="is_equipement_reseau_action" />
+        <menuitem id="is_action_menu"            sequence="40" name="Actions"            parent="is_glpi_menu" action="is_action_action" />
+        <menuitem id="is_actio_globalen_menu"    sequence="50" name="Actions globales"   parent="is_glpi_menu" action="is_action_globale_action" />
+
+        <menuitem id="is_identifiant_main_menu"  sequence="20" name="Identifiants"       parent="is_glpi_main_menu"/>
+        <menuitem id="is_identifiant_menu"       sequence="10" name="Identifiants"       parent="is_identifiant_main_menu" action="is_identifiant_action" />
+        <menuitem id="is_pureftp_menu"           sequence="20" name="Comptes FTP"        parent="is_identifiant_main_menu" action="is_pureftp_action" />
+
+        <menuitem id="is_sauvegarde_menu"        sequence="30" name="Sauvegardes"           parent="is_glpi_main_menu"/>
+        <menuitem id="is_suivi_sauvegarde_menu"  sequence="10" name="Suivi des sauvegardes" parent="is_sauvegarde_menu" action="is_suivi_sauvegarde_action" />
+        <menuitem id="is_save_mozilla_menu"      sequence="20" name="Sauvegarde Mozilla"    parent="is_sauvegarde_menu" action="is_save_mozilla_action" />
+        <menuitem id="is_save_serveur_menu"      sequence="30" name="Sauvegarde Serveur"    parent="is_sauvegarde_menu" action="is_save_serveur_action" />
+
+        <menuitem id="is_tables_menu"            sequence="40" name="Tables"             parent="is_glpi_main_menu"/>
+        <menuitem id="is_site_menu"              sequence="10" name="Sites"              parent="is_tables_menu" action="is_site_action" />
+        <menuitem id="is_type_ordinateur_menu"   sequence="20" name="Type d'ordinateur"  parent="is_tables_menu" action="is_type_ordinateur_action" />
+        <menuitem id="is_bureau_menu"            sequence="30" name="Bureaux"            parent="is_tables_menu" action="is_bureau_action" />
+        <menuitem id="is_service_menu"           sequence="40" name="Services"           parent="is_tables_menu" action="is_service_action" />
+        <menuitem id="is_partage_menu"           sequence="50" name="Partages Windows"   parent="is_tables_menu" action="is_partage_action" />
+
+        <!-- Déplacement des menus standard pour les masquer -->
+        <!-- <menuitem id="mail.mail_feeds_main"      sequence="90" name="Messagerie"         parent="base.menu_custom"/> -->
+    </data>
+</odoo>

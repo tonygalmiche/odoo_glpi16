@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- <record id="is_action_globale_seq_type" model="ir.sequence.type">
+            <field name="name">is_action_globale_seq_type</field>
+            <field name="code">is.action.globale</field>
+        </record> -->
+        <record id="is_action_globale_seq" model="ir.sequence">
+            <field name="name">is_action_globale_seq</field>
+            <field name="code">is.action.globale</field>
+            <field name="prefix"></field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+
+        <record id="is_action_globale_form_view" model="ir.ui.view">
+            <field name="name">is_action_globale_from_view</field>
+            <field name="model">is.action.globale</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button 
+                            name="creer_actions"
+                            string="Créer ou actualiser les actions pour les ordinateurs"
+                            confirm="Voulez-vous vraiment créer ou actualiser les actions ?"
+                            type="object"
+                            attrs="{'invisible': [('filtre_sur', '!=', 'ordinateur')]}"
+                        />
+                        <button 
+                            name="creer_actions"
+                            string="Créer ou actualiser les actions pour les utilisateurs"
+                            confirm="Voulez-vous vraiment créer ou actualiser les actions ?"
+                            type="object"
+                            attrs="{'invisible': [('filtre_sur', '!=', 'utilisateur')]}"
+                        />
+                        <button 
+                            name="liste_actions"
+                            string="Liste des actions"
+                            type="object"
+                            attrs="{'invisible': [('action_ids', '=', [])]}"
+                        />
+                    </header>
+                    <sheet class="oe_form_sheet_width_wider">
+                        <group>
+                            <group string="Identification">
+                                <field name="name" />
+                                <field name="action" />
+                                <field name="date_creation" />
+                                <field name="date_prevue_debut" />
+                                <field name="tps_prevu" widget="float_time"/>
+                                <field name="nb_actions_semaine" />
+                            </group>
+                            <group string="Filtre création actions">
+                                <field name="filtre_sur" />
+                                <field name="site_id" />
+                                <field name="service_id" />
+                                <field name="utilisateur_ids" widget="many2many_tags"  attrs="{'invisible': [('filtre_sur', '!=', 'utilisateur')]}" />
+                                <field name="type_ordinateur_id"                       attrs="{'invisible': [('filtre_sur', '!=', 'ordinateur')]}" />
+                                <field name="ordinateur_ids"  widget="many2many_tags"  attrs="{'invisible': [('filtre_sur', '!=', 'ordinateur')]}" />
+                                <field name="nb_actions" />
+                                <field name="nb_actions_restant" />
+                                <field name="date_prevue" />
+                                <field name="date_realisee" />
+                                <field name="avancement_txt" />
+                                <field name="avancement" widget="progressbar"/>
+                            </group>
+                        </group>
+                        <group>
+                                <field name="commentaire" />
+                        </group>
+
+                        <group attrs="{'invisible': [('action_ids', '=', [])]}" >
+                            <field name="action_ids" nolabel="1">
+                                <tree>
+                                    <button string="Accèder à l'action" name="acceder_action" type="object" icon="gtk-zoom-in" />
+                                    <field name="name" />
+                                    <field name="ordinateur_id"  widget="many2one_clickable"/>
+                                    <field name="utilisateur_id" widget="many2one_clickable"/>
+                                    <field name="date_creation" />
+                                    <field name="date_prevue" />
+                                    <field name="tps_prevu" widget="float_time" sum="Total" />
+                                    <field name="date_realisee" />
+                                    <field name="tps_passe" widget="float_time" sum="Total"/>
+                                    <field name="commentaire" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_action_globale_tree_view">
+            <field name="name">is_action_globale_tree_view</field>
+            <field name="model">is.action.globale</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="action" />
+                    <field name="date_creation" />
+                    <field name="date_prevue_debut" />
+                    <field name="tps_prevu" widget="float_time" sum="Total"/>
+                    <field name="nb_actions_semaine" />
+                    <field name="nb_actions_restant" sum="Total"/>
+                    <field name="date_prevue" />
+                    <field name="date_realisee" />
+                    <field name="avancement_txt" />
+                    <field name="avancement" widget="progressbar"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_action_globale_search_view" model="ir.ui.view">
+            <field name="name">is_action_globale_search_view</field>
+            <field name="model">is.action.globale</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="action" />
+                    <field name="date_creation" />
+                    <field name="date_prevue" />
+                    <field name="date_realisee" />
+                    <field name="commentaire" />
+                    <filter string="Fait"    name="fait"     domain="[('date_realisee','!=',False)]"/>
+                    <filter string="A Faire" name="a_faire"  domain="[('date_realisee','=',False)]"/>
+                </search>
+            </field>
+        </record>
+        <record id="is_action_globale_action" model="ir.actions.act_window">
+            <field name="name">Actions globales</field>
+            <field name="res_model">is.action.globale</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_a_faire':1}</field>
+        </record>
+    </data>
+</odoo>

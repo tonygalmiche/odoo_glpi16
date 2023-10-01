@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="etat_ignore_action_server" model="ir.actions.server">
+             <field name="name">Etat=Ignoré</field>
+            <field name="model_id" ref="model_is_logiciel"/>
+            <field name="code">action = self.etat_ignore_action(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+        <!-- <record id="etat_ignore_ir_value" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'is.logiciel'" name="model"/>
+            <field name="name">Etat=Ignoré</field>
+            <field eval="'ir.actions.server,%d'%etat_ignore_action_server" name="value"/>
+        </record> -->
+
+
+        <record id="etat_autorise_action_server" model="ir.actions.server">
+             <field name="name">Etat=Autorisé</field>
+            <field name="model_id" ref="model_is_logiciel"/>
+            <field name="code">action = self.etat_autorise_action(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+        <!-- <record id="etat_autorise_ir_value" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'is.logiciel'" name="model"/>
+            <field name="name">Etat=Autorisé</field>
+            <field eval="'ir.actions.server,%d'%etat_autorise_action_server" name="value"/>
+        </record> -->
+
+
+        <record id="etat_interdit_action_server" model="ir.actions.server">
+             <field name="name">Etat=Interdit</field>
+            <field name="model_id" ref="model_is_logiciel"/>
+            <field name="code">action = self.etat_interdit_action(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+        <!-- <record id="etat_interdit_ir_value" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'is.logiciel'" name="model"/>
+            <field name="name">Etat=Interdit</field>
+            <field eval="'ir.actions.server,%d'%etat_interdit_action_server" name="value"/>
+        </record> -->
+
+
+
+        <record id="is_logiciel_form_view" model="ir.ui.view">
+            <field name="name">is_logiciel_from_view</field>
+            <field name="model">is.logiciel</field>
+            <field name="arch" type="xml">
+                <form create="0">
+                    <header>
+                        <field name="state" widget="statusbar" clickable="True"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="logiciel"    readonly="1"/>
+                            <field name="version"     readonly="1"/>
+                            <field name="nb"          readonly="1"/>
+                            <field name="ordinateurs" readonly="1"/>
+                            <field name="commentaire"/>
+                         </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_logiciel_tree_view">
+            <field name="name">is_logiciel_tree_view</field>
+            <field name="model">is.logiciel</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree create="0">
+                    <field name="logiciel"/>
+                    <field name="version"/>
+                    <field name="nb"/>
+                    <field name="ordinateurs"/>
+                    <field name="commentaire"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_logiciel_search_view" model="ir.ui.view">
+            <field name="name">is_logiciel_search_view</field>
+            <field name="model">is.logiciel</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="logiciel"/>
+                    <field name="version"/>
+                    <field name="ordinateurs"/>
+                    <field name="commentaire"/>
+                    <field name="state"/>
+                    <filter string="Indéfini"  name="indefini"  domain="[('state','=',False)]"/>
+                    <filter string="Ignoré"    name="ignore"    domain="[('state','=','ignore')]"/>
+                    <filter string="Autorisé"  name="autorise"  domain="[('state','=','autorise')]"/>
+                    <filter string="Interdit"  name="interdit"  domain="[('state','=','interdit')]"/>
+                </search>
+            </field>
+        </record>
+        <record id="is_logiciel_action" model="ir.actions.act_window">
+            <field name="name">Logiciels</field>
+            <field name="res_model">is.logiciel</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

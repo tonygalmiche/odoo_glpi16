@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_pureftp_form_view" model="ir.ui.view">
+            <field name="name">is_pureftp_from_view</field>
+            <field name="model">is.pureftp</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="mot_de_passe" />
+                            <field name="dossier" />
+                            <field name="commentaire" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_pureftp_tree_view">
+            <field name="name">is_pureftp_tree_view</field>
+            <field name="model">is.pureftp</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="mot_de_passe" />
+                    <field name="dossier" />
+                    <field name="commentaire" />
+                </tree>
+            </field>
+        </record>
+        <record id="is_pureftp_search_view" model="ir.ui.view">
+            <field name="name">is_pureftp_search_view</field>
+            <field name="model">is.pureftp</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="commentaire" />
+                </search>
+            </field>
+        </record>
+        <record id="is_pureftp_action" model="ir.actions.act_window">
+            <field name="name">Comptes FTP</field>
+            <field name="res_model">is.pureftp</field>
+            <field name="view_mode">tree,form</field>
+            <field name="limit">200</field>
+        </record>
+
+
+        <record id="update_pureftp_action_server" model="ir.actions.server">
+             <field name="name">Mise à jour du compte dans Pure-FTP</field>
+            <field name="model_id" ref="model_is_pureftp"/>
+            <field name="code">action = self.update_pureftp(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+        <!-- <record id="update_pureftp_ir_value" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'is.pureftp'" name="model"/>
+            <field name="name">Mise à jour du compte dans Pure-FTP</field>
+            <field eval="'ir.actions.server,%d'%update_pureftp_action_server" name="value"/>
+        </record> -->
+
+
+
+    </data>
+</odoo>

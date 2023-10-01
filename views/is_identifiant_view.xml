@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_identifiant_form_view" model="ir.ui.view">
+            <field name="name">is_identifiant_from_view</field>
+            <field name="model">is.identifiant</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="mot_de_passe"/>
+                                <field name="site_id"/>
+                                <field name="service_id"/>
+                                <field name="utilisateur_id"/>
+                                <field name="ordinateur_id"/>
+                            </group>
+                            <group>
+                                <field name="admin_ordinateur"/>
+                                <field name="cpt_utilisateur"/>
+                                <field name="lam_gray"/>
+                                <field name="lam_st_brice"/>
+                                <field name="lam_pk"/>
+                                <field name="bluemind"/>
+                                <field name="mail"/>
+                                <field name="tightvnc"/>
+                                <field name="odoo"/>
+                                <field name="microsoft"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="commentaire"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_identifiant_tree_view">
+            <field name="name">is_identifiant_tree_view</field>
+            <field name="model">is.identifiant</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="mot_de_passe"/>
+                    <field name="site_id"/>
+                    <field name="service_id"/>
+                    <field name="utilisateur_id"/>
+                    <field name="ordinateur_id"/>
+                    <field name="admin_ordinateur"/>
+                    <field name="cpt_utilisateur"/>
+                    <field name="lam_gray"/>
+                    <field name="lam_st_brice"/>
+                    <field name="lam_pk"/>
+                    <field name="bluemind"/>
+                    <field name="mail"/>
+                    <field name="tightvnc"/>
+                    <field name="odoo"/>
+                    <field name="microsoft"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_identifiant_search_view" model="ir.ui.view">
+            <field name="name">is_identifiant_search_view</field>
+            <field name="model">is.identifiant</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                    <field name="site_id" />
+                    <field name="service_id" />
+                    <field name="utilisateur_id" />
+                    <field name="ordinateur_id" />
+                    <field name="commentaire" />
+                    <filter string="Compte utilisateur" name="cpt_utilisateur" domain="[('cpt_utilisateur','=',True)]"/>
+                    <filter string="LAM Gray"           name="lam_gray"        domain="[('lam_gray','=',True)]"/>
+                    <filter string="LAM ST-Brice"       name="lam_st_brice"    domain="[('lam_st_brice','=',True)]"/>
+                    <filter string="LAM PK"             name="lam_pk"          domain="[('lam_pk','=',True)]"/>
+                    <filter string="Odoo Agenda"        name="bluemind"        domain="[('bluemind','=',True)]"/>
+                    <filter string="Mail FC-NET"        name="mail"            domain="[('mail','=',True)]"/>
+                    <filter string="TightVNC"           name="tightvnc"        domain="[('tightvnc','=',True)]"/>
+                    <filter string="Odoo"               name="odoo"            domain="[('odoo','=',True)]"/>
+                    <filter string="Microsoft"          name="microsoft"       domain="[('microsoft','=',True)]"/>
+                </search>
+            </field>
+        </record>
+        <record id="is_identifiant_action" model="ir.actions.act_window">
+            <field name="name">Identifiants</field>
+            <field name="res_model">is.identifiant</field>
+            <field name="view_mode">tree,form</field>
+            <field name="limit">500</field>
+        </record>
+
+        <!-- Envoyer identifiant Bluemind -->
+        <record id="envoyer_identifiant_bluemind_action_server" model="ir.actions.server">
+             <field name="name">Envoyer identifiant Odoo Agenda par mail</field>
+            <field name="model_id" ref="model_is_identifiant"/>
+            <field name="code">action = self.envoyer_identifiant_bluemind_action(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+        <!-- <record id="envoyer_identifiant_bluemind_ir_value" model="ir.values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'is.identifiant'" name="model"/>
+            <field name="name">Envoyer identifiant Odoo Agenda par mail</field>
+            <field eval="'ir.actions.server,%d'%envoyer_identifiant_bluemind_action_server" name="value"/>
+        </record>
+ -->
+    </data>
+</odoo>

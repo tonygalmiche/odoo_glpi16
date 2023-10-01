@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="is_equipement_reseau_form_view" model="ir.ui.view">
+            <field name="name">is_equipement_reseau_from_view</field>
+            <field name="model">is.equipement.reseau</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="adresse_ip"      readonly="1"/>
+                                <field name="adresse_mac"     readonly="1"/>
+                                <field name="site_id"         readonly="1"/>
+                                <field name="ordinateur_id"/>
+                                <field name="description_arp" readonly="1"/>
+                                <field name="dhcp_hostname"   readonly="1"/>
+                                <field name="dhcp_end"        readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="adresse_principale"/>
+                                <field name="date_creation"        readonly="1"/>
+                                <field name="date_modification"    readonly="1"/>
+                                <field name="origine_modification" readonly="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="commentaire" />
+                            <field name="active" />
+                        </group>
+                    </sheet>
+               </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_equipement_reseau_tree_view">
+            <field name="name">is_equipement_reseau_tree_view</field>
+            <field name="model">is.equipement.reseau</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="adresse_ip"/>
+                    <field name="adresse_mac"/>
+                    <field name="adresse_principale"/>
+                    <field name="site_id"/>
+                    <field name="ordinateur_id"/>
+                    <field name="description_arp"/>
+                    <field name="dhcp_hostname"/>
+                    <field name="dhcp_end"/>
+                    <field name="origine_modification"/>
+                    <field name="date_creation"/>
+                    <field name="date_modification"/>
+                    <field name="commentaire"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_equipement_reseau_search_view" model="ir.ui.view">
+            <field name="name">is_equipement_reseau_search_view</field>
+            <field name="model">is.equipement.reseau</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="adresse_ip"/>
+                    <field name="adresse_mac"/>
+                    <field name="site_id"/>
+                    <field name="ordinateur_id" />
+                    <field name="description_arp"/>
+                    <field name="origine_modification" />
+                    <field name="commentaire" />
+                </search>
+            </field>
+        </record>
+        <record id="is_equipement_reseau_action" model="ir.actions.act_window">
+            <field name="name">Equipement réseau</field>
+            <field name="res_model">is.equipement.reseau</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>
