@@ -15,6 +15,7 @@ class is_partage(models.Model):
 
 class is_bureau(models.Model):
     _name = "is.bureau"
+    _inherit=['mail.thread']
     _description = "Bureau"
     _order='name'
 

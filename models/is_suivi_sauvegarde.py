@@ -13,14 +13,12 @@ class is_suivi_sauvegarde(models.Model):
     resultat        = fields.Char('Résultat', required=True)
     logs            = fields.Text('Analyse des logs')
 
-
-    def name_get(self, cr, uid, ids, context=None):
+    def name_get(self):
         res = []
-        for obj in self.browse(cr, uid, ids, context=context):
-            name=str(obj.date)+" "+obj.ordinateur_id.name
+        for obj in self:
+            name="%s %s"%(obj.date, obj.ordinateur_id.name)
             res.append((obj.id,name))
         return res
-
 
     def acceder_suivi_sauvegarde(self):
         for obj in self:

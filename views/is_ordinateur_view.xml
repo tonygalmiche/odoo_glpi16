@@ -55,6 +55,10 @@
                             <field name="commentaire" />
                         </group>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                </form>
             </field>
         </record>
@@ -165,45 +169,38 @@
                         </group>
                         <notebook>
                             <page string="Actions" attrs="{'invisible': [('action_ids', '=', [])]}">
-                                <group>
-                                    <field name="action_ids" nolabel="1">
-                                        <tree>
-                                            <button string="Accèder à l'action" name="acceder_action" type="object" icon="gtk-zoom-in" />
-                                            <field name="name" />
-                                            <field name="utilisateur_id"  widget="many2one_clickable"/>
-                                            <field name="date_creation" />
-                                            <field name="date_prevue" />
-                                            <field name="date_realisee" />
-                                            <field name="commentaire" />
-                                        </tree>
-                                    </field>
-                                </group>
+                                <field name="action_ids" nolabel="1">
+                                    <tree>
+                                        <button title="Accèder à l'action" name="acceder_action" type="object" icon="fa-search-plus" />
+                                        <field name="name" />
+                                        <field name="utilisateur_id"  widget="many2one_clickable"/>
+                                        <field name="date_creation" />
+                                        <field name="date_prevue" />
+                                        <field name="date_realisee" />
+                                        <field name="commentaire" />
+                                    </tree>
+                                </field>
                             </page>
                             <page string="Sauvegardes Mozilla" attrs="{'invisible': [('partage_nb', '=', 0)]}">
-                                <group>
-                                    <field name="sauvegarde_ids" nolabel="1">
-                                        <tree>
-                                            <!-- <button string="Accèder à la sauvegarde" name="acceder_sauvegarde" type="object" icon="gtk-zoom-in" /> -->
-                                            <field name="date" />
-                                            <field name="partage" />
-                                            <field name="taille" />
-                                            <field name="nb_modifs" />
-                                            <field name="temps" />
-                                            <field name="resultat" />
-                                        </tree>
-                                    </field>
-                                </group>
+                                <field name="sauvegarde_ids" nolabel="1">
+                                    <tree>
+                                        <field name="date" />
+                                        <field name="partage" />
+                                        <field name="taille" />
+                                        <field name="nb_modifs" />
+                                        <field name="temps" />
+                                        <field name="resultat" />
+                                    </tree>
+                                </field>
                             </page>
                             <page string="Suivi des sauvegardes" attrs="{'invisible': [('suivi_sauvegarde_nb', '=', 0)]}">
-                                <group>
-                                    <field name="suivi_sauvegarde_ids" nolabel="1">
-                                        <tree>
-                                            <button string="Accèder au suivi" name="acceder_suivi_sauvegarde" type="object" icon="gtk-zoom-in" />
-                                            <field name="date" />
-                                            <field name="resultat" />
-                                        </tree>
-                                    </field>
-                                </group>
+                                <field name="suivi_sauvegarde_ids" nolabel="1">
+                                    <tree>
+                                        <button title="Accèder au suivi" name="acceder_suivi_sauvegarde" type="object" icon="fa-search-plus" />
+                                        <field name="date" />
+                                        <field name="resultat" />
+                                    </tree>
+                                </field>
                             </page>
                             <page string="GLPI" attrs="{'invisible': [('glpi_name', '=', False)]}">
                                 <group>

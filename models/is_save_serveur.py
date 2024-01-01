@@ -16,14 +16,10 @@ class is_save_serveur(models.Model):
     nb_anomalies    = fields.Integer('Nb anomalies')
     resultat        = fields.Text('Résultat')
 
-
-    # def name_get(self, cr, uid, ids, context=None):
-    #     res = []
-    #     for obj in self.browse(cr, uid, ids, context=context):
-    #         name=str(obj.date)+" "+obj.ordinateur_id.name
-    #         res.append((obj.id,name))
-    #     return res
-
-
-
+    def name_get(self):
+        res = []
+        for obj in self:
+            name="%s %s"%(obj.date, obj.ordinateur_id.name)
+            res.append((obj.id,name))
+        return res
 

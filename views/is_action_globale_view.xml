@@ -71,23 +71,20 @@
                         <group>
                                 <field name="commentaire" />
                         </group>
-
-                        <group attrs="{'invisible': [('action_ids', '=', [])]}" >
-                            <field name="action_ids" nolabel="1">
-                                <tree>
-                                    <button string="Accèder à l'action" name="acceder_action" type="object" icon="gtk-zoom-in" />
-                                    <field name="name" />
-                                    <field name="ordinateur_id"  widget="many2one_clickable"/>
-                                    <field name="utilisateur_id" widget="many2one_clickable"/>
-                                    <field name="date_creation" />
-                                    <field name="date_prevue" />
-                                    <field name="tps_prevu" widget="float_time" sum="Total" />
-                                    <field name="date_realisee" />
-                                    <field name="tps_passe" widget="float_time" sum="Total"/>
-                                    <field name="commentaire" />
-                                </tree>
-                            </field>
-                        </group>
+                        <field name="action_ids" nolabel="1" attrs="{'invisible': [('action_ids', '=', [])]}">
+                            <tree>
+                                <button title="Accèder à l'action" name="acceder_action" type="object" icon="fa-search-plus" />
+                                <field name="name" />
+                                <field name="ordinateur_id"  widget="many2one_clickable"/>
+                                <field name="utilisateur_id" widget="many2one_clickable"/>
+                                <field name="date_creation" />
+                                <field name="date_prevue" />
+                                <field name="tps_prevu" widget="float_time" sum="Total" />
+                                <field name="date_realisee" />
+                                <field name="tps_passe" widget="float_time" sum="Total"/>
+                                <field name="commentaire" />
+                            </tree>
+                        </field>
                     </sheet>
                </form>
             </field>

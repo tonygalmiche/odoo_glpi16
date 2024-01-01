@@ -20,14 +20,10 @@ class is_equipement_reseau(models.Model):
     adresse_principale   = fields.Boolean('Adresse réseau principale', default=True, help="Adresse utilisée pour la sauvegarde des messageries")
     active               = fields.Boolean('Actif', default=True)
 
-
-    def name_get(self, cr, uid, ids, context=None):
+    def name_get(self):
         res = []
-        for obj in self.browse(cr, uid, ids, context=context):
+        for obj in self:
             name=str(obj.adresse_ip)
             res.append((obj.id,name))
         return res
-
-
-
 

@@ -23,14 +23,12 @@ class is_save_mozilla(models.Model):
     temps           = fields.Integer('Temps (s)')
     resultat        = fields.Text('Résultat')
 
-
-    def name_get(self, cr, uid, ids, context=None):
+    def name_get(self):
         res = []
-        for obj in self.browse(cr, uid, ids, context=context):
-            name=str(obj.heure_debut)+" "+obj.ordinateur_id.name
+        for obj in self:
+            name="%s %s"%(obj.heure_debut, obj.ordinateur_id.name)
             res.append((obj.id,name))
         return res
-
 
     def mail_anomalie_sauvegarde_scheduler_action(self, cr, uid, use_new_cursor=False, company_id = False, context=None):
         self.mail_anomalie_sauvegarde_action(cr, uid, context)

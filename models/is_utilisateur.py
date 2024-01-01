@@ -165,6 +165,7 @@ class is_utilisateur(models.Model):
 
 class is_site(models.Model):
     _name = "is.site"
+    _inherit=['mail.thread']
     _description = "Site"
     _order='name'
 

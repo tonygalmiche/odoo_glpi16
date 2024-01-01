@@ -11,6 +11,7 @@ InfoSaône - Module Odoo 16 pour GLPI
     "website": 'http://www.infosaone.com',
     "depends" : [
         "base",
+        "mail",
         #"document",
     ], 
     "data" : [
