@@ -2,43 +2,28 @@
 <odoo>
     <data>
         <record id="etat_ignore_action_server" model="ir.actions.server">
-             <field name="name">Etat=Ignoré</field>
-            <field name="model_id" ref="model_is_logiciel"/>
-            <field name="code">action = self.etat_ignore_action(cr, uid, context.get('active_ids', []), context=context)</field>
-        </record>
-        <!-- <record id="etat_ignore_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.logiciel'" name="model"/>
             <field name="name">Etat=Ignoré</field>
-            <field eval="'ir.actions.server,%d'%etat_ignore_action_server" name="value"/>
-        </record> -->
-
+            <field name="model_id" ref="model_is_logiciel"/>
+            <field name="binding_model_id" ref="model_is_logiciel"/>
+            <field name="state">code</field>
+            <field name="code">action = records.etat_ignore_action()</field>
+        </record>
 
         <record id="etat_autorise_action_server" model="ir.actions.server">
-             <field name="name">Etat=Autorisé</field>
-            <field name="model_id" ref="model_is_logiciel"/>
-            <field name="code">action = self.etat_autorise_action(cr, uid, context.get('active_ids', []), context=context)</field>
-        </record>
-        <!-- <record id="etat_autorise_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.logiciel'" name="model"/>
             <field name="name">Etat=Autorisé</field>
-            <field eval="'ir.actions.server,%d'%etat_autorise_action_server" name="value"/>
-        </record> -->
-
+            <field name="model_id" ref="model_is_logiciel"/>
+            <field name="binding_model_id" ref="model_is_logiciel"/>
+            <field name="state">code</field>
+            <field name="code">action = records.etat_autorise_action()</field>
+        </record>
 
         <record id="etat_interdit_action_server" model="ir.actions.server">
-             <field name="name">Etat=Interdit</field>
-            <field name="model_id" ref="model_is_logiciel"/>
-            <field name="code">action = self.etat_interdit_action(cr, uid, context.get('active_ids', []), context=context)</field>
-        </record>
-        <!-- <record id="etat_interdit_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.logiciel'" name="model"/>
             <field name="name">Etat=Interdit</field>
-            <field eval="'ir.actions.server,%d'%etat_interdit_action_server" name="value"/>
-        </record> -->
-
+            <field name="model_id" ref="model_is_logiciel"/>
+            <field name="binding_model_id" ref="model_is_logiciel"/>
+            <field name="state">code</field>
+            <field name="code">action = records.etat_interdit_action()</field>
+        </record>
 
 
         <record id="is_logiciel_form_view" model="ir.ui.view">

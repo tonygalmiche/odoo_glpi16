@@ -95,15 +95,10 @@
         <!-- Envoyer identifiant Bluemind -->
         <record id="envoyer_identifiant_bluemind_action_server" model="ir.actions.server">
              <field name="name">Envoyer identifiant Odoo Agenda par mail</field>
-            <field name="model_id" ref="model_is_identifiant"/>
-            <field name="code">action = self.envoyer_identifiant_bluemind_action(cr, uid, context.get('active_ids', []), context=context)</field>
+             <field name="model_id" ref="model_is_identifiant"/>
+             <field name="binding_model_id" ref="model_is_identifiant"/>
+             <field name="state">code</field>
+             <field name="code">action = records.envoyer_identifiant_bluemind_action()</field>
         </record>
-        <!-- <record id="envoyer_identifiant_bluemind_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.identifiant'" name="model"/>
-            <field name="name">Envoyer identifiant Odoo Agenda par mail</field>
-            <field eval="'ir.actions.server,%d'%envoyer_identifiant_bluemind_action_server" name="value"/>
-        </record>
- -->
     </data>
 </odoo>

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models,fields,api
+import base64
 
 
 class is_service(models.Model):
@@ -39,13 +40,13 @@ class is_utilisateur(models.Model):
 
     def get_tr(self,val):
         if val and val!='':
-            val=u"""
+            val="""
                 <tr>
                     <td>
-                        <font size="2" color="#939393">"""+val+u"""</font>
+                        <font size="2" color="#939393">%s</font>
                     </td>
                 </tr>
-            """
+            """%val
         else:
             val=''
         return val
@@ -66,19 +67,26 @@ class is_utilisateur(models.Model):
             if fax != '':
                 fax = u'Fax : '+fax
 
-            fonction  = self.get_tr(obj.fonction)
-            telephone = self.get_tr(telephone)
-            portable  = self.get_tr(portable)
-            fax       = self.get_tr(fax)
-            autre     = self.get_tr(obj.autre)
+            # fonction  = self.get_tr(obj.fonction)
+            # telephone = self.get_tr(telephone)
+            # portable  = self.get_tr(portable)
+            # fax       = self.get_tr(fax)
+            # autre     = self.get_tr(obj.autre)
 
             html = html.replace('${name}'     , (obj.name or ''))
             html = html.replace('${mail}'    , (obj.mail or ''))
-            html = html.replace('<tr><td>${fonction}</td></tr>' , fonction)
-            html = html.replace('<tr><td>${telephone}</td></tr>', telephone)
-            html = html.replace('<tr><td>${portable}</td></tr>' , portable)
-            html = html.replace('<tr><td>${fax}</td></tr>'      , fax)
-            html = html.replace('<tr><td>${autre}</td></tr>'    , autre)
+
+            html = html.replace('${fonction}' , (obj.fonction or ''))
+            html = html.replace('${telephone}', (obj.telephone or ''))
+            html = html.replace('${portable}' , (obj.portable or ''))
+            html = html.replace('${fax}'      , (obj.fax or ''))
+            html = html.replace('${autre}'    , (obj.autre or ''))
+
+            # html = html.replace('<tr><td>${fonction}</td></tr>' , fonction)
+            # html = html.replace('<tr><td>${telephone}</td></tr>', telephone)
+            # html = html.replace('<tr><td>${portable}</td></tr>' , portable)
+            # html = html.replace('<tr><td>${fax}</td></tr>'      , fax)
+            # html = html.replace('<tr><td>${autre}</td></tr>'    , autre)
             if html:
                 obj.signature_mail = html
             obj.generer_piece_jointe()
@@ -94,7 +102,8 @@ class is_utilisateur(models.Model):
             f = open(path,'wb')
             f.write(obj.signature_mail.encode('utf-8'))
             f.close()
-            datas = open(path,'rb').read().encode('base64')
+            datas = open(path,'rb').read()
+            #datas = open(path,'rb').read().encode('base64')
 
             # ** Recherche si une pièce jointe est déja associèe ***************
             attachment_obj = self.env['ir.attachment']
@@ -106,11 +115,10 @@ class is_utilisateur(models.Model):
             # ** Creation ou modification de la pièce jointe *******************
             vals = {
                 'name':        name,
-                'datas_fname': name,
                 'type':        'binary',
                 'res_model':   model,
                 'res_id':      obj.id,
-                'datas':       datas,
+                'datas':       base64.b64encode(datas) #datas,
             }
             if attachments:
                 for attachment in attachments:

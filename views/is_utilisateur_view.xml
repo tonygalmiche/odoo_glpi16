@@ -14,12 +14,10 @@
                             <field name="code" />
                             <field name="dest_mozilla_ids" widget="many2many_tags"/>
                         </group>
-                        <group string="Modèle de la signature des mails">
-                            <field name="signature_mail" nolabel="1"/>
-                        </group>
-                        <group string="Contenu du mail">
-                            <field name="contenu_mail" nolabel="1"/>
-                        </group>
+                        <group string="Modèle de la signature des mails"/>
+                        <field name="signature_mail" nolabel="1"/>
+                        <group string="Contenu du mail"/>
+                        <field name="contenu_mail" nolabel="1"/>
                     </sheet>
 
                     <div class="oe_chatter">
@@ -107,29 +105,19 @@
         <record id="generer_signature_mail_action_server" model="ir.actions.server">
              <field name="name">Générer signature mail</field>
             <field name="model_id" ref="model_is_utilisateur"/>
-            <field name="code">action = self.generer_signature_mail(cr, uid, context.get('active_ids', []), context=context)</field>
+            <field name="binding_model_id" ref="model_is_utilisateur"/>
+            <field name="state">code</field>
+            <field name="code">action = records.generer_signature_mail()</field>
         </record>
-        <!-- <record id="generer_signature_mail_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.utilisateur'" name="model"/>
-            <field name="name">Générer signature mail</field>
-            <field eval="'ir.actions.server,%d'%generer_signature_mail_action_server" name="value"/>
-        </record> -->
-
 
         <!-- Envoyer signature mail -->
         <record id="envoyer_signature_mail_action_server" model="ir.actions.server">
              <field name="name">Envoyer signature mail</field>
             <field name="model_id" ref="model_is_utilisateur"/>
-            <field name="code">action = self.envoyer_signature_mail(cr, uid, context.get('active_ids', []), context=context)</field>
+            <field name="binding_model_id" ref="model_is_utilisateur"/>
+            <field name="state">code</field>
+            <field name="code">action = records.envoyer_signature_mail()</field>
         </record>
-        <!-- <record id="envoyer_signature_mail_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.utilisateur'" name="model"/>
-            <field name="name">Envoyer signature mail</field>
-            <field eval="'ir.actions.server,%d'%envoyer_signature_mail_action_server" name="value"/>
-        </record> -->
-
 
         <record id="is_utilisateur_form_view" model="ir.ui.view">
             <field name="name">is_utilisateur_from_view</field>

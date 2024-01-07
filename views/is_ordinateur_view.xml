@@ -287,16 +287,13 @@
 
         <!-- Actualiser depuis GLPI -->
         <record id="actualiser_glpi_action_server" model="ir.actions.server">
-             <field name="name">Actualiser depuis GLPI</field>
-            <field name="model_id" ref="model_is_ordinateur"/>
-            <field name="code">action = self.actualiser_glpi_action(cr, uid, context.get('active_ids', []), context=context)</field>
-        </record>
-        <!-- <record id="actualiser_glpi_action_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.ordinateur'" name="model"/>
             <field name="name">Actualiser depuis GLPI</field>
-            <field eval="'ir.actions.server,%d'%actualiser_glpi_action_server" name="value"/>
-        </record> -->
+            <field name="model_id" ref="model_is_ordinateur"/>
+            <field name="binding_model_id" ref="model_is_ordinateur"/>
+            <field name="state">code</field>
+            <field name="code">action = records.actualiser_glpi_action()</field>
+        </record>
+
 
 
         <!-- Lancement automatisé actualisation GLPI -->

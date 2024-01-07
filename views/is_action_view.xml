@@ -108,47 +108,22 @@
             <field name="context">{'search_default_a_faire':1}</field>
         </record>
 
-
         <!-- Actualiser service -->
         <record id="actualiser_service_action_server" model="ir.actions.server">
              <field name="name">Actualiser service</field>
             <field name="model_id" ref="model_is_action"/>
-            <field name="code">action = self.actualiser_service_action(cr, uid, context.get('active_ids', []), context=context)</field>
+            <field name="binding_model_id" ref="model_is_action"/>
+            <field name="state">code</field>
+            <field name="code">action = records.actualiser_service_action()</field>
         </record>
-        <!-- <record id="actualiser_service_action_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.action'" name="model"/>
-            <field name="name">Actualiser service</field>
-            <field eval="'ir.actions.server,%d'%actualiser_service_action_server" name="value"/>
-        </record> -->
-
-
-
 
         <!-- Actualiser service -->
         <record id="solder_action_action_server" model="ir.actions.server">
              <field name="name">Solder l'action</field>
             <field name="model_id" ref="model_is_action"/>
-            <field name="code">action = self.solder_action_action(cr, uid, context.get('active_ids', []), context=context)</field>
+            <field name="binding_model_id" ref="model_is_action"/>
+            <field name="state">code</field>
+            <field name="code">action = records.solder_action_action()</field>
         </record>
-        <!-- <record id="solder_action_action_ir_value" model="ir.values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'is.action'" name="model"/>
-            <field name="name">Solder l'action</field>
-            <field eval="'ir.actions.server,%d'%solder_action_action_server" name="value"/>
-        </record> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
     </data>
 </odoo>
