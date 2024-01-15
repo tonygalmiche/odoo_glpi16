@@ -73,20 +73,28 @@ class is_utilisateur(models.Model):
             fax       = self.get_tr(fax)
             autre     = self.get_tr(obj.autre)
 
+
+            print(fonction)
+
             html = html.replace('${name}'     , (obj.name or ''))
             html = html.replace('${mail}'    , (obj.mail or ''))
 
-            # html = html.replace('${fonction}' , (obj.fonction or ''))
-            # html = html.replace('${telephone}', (obj.telephone or ''))
-            # html = html.replace('${portable}' , (obj.portable or ''))
-            # html = html.replace('${fax}'      , (obj.fax or ''))
-            # html = html.replace('${autre}'    , (obj.autre or ''))
+            html = html.replace('${fonction}' , (obj.fonction or ''))
+            html = html.replace('${telephone}', (obj.telephone or ''))
+            html = html.replace('${portable}' , (obj.portable or ''))
+            html = html.replace('${fax}'      , (obj.fax or ''))
+            html = html.replace('${autre}'    , (obj.autre or ''))
 
-            html = html.replace('<tr><td>${fonction}</td></tr>' , fonction)
-            html = html.replace('<tr><td>${telephone}</td></tr>', telephone)
-            html = html.replace('<tr><td>${portable}</td></tr>' , portable)
-            html = html.replace('<tr><td>${fax}</td></tr>'      , fax)
-            html = html.replace('<tr><td>${autre}</td></tr>'    , autre)
+
+            # html = html.replace('${fonction}' , (fonction or ''))
+
+
+
+            # html = html.replace('<tr><td>${fonction}</td></tr>' , fonction)
+            # html = html.replace('<tr><td>${telephone}</td></tr>', telephone)
+            # html = html.replace('<tr><td>${portable}</td></tr>' , portable)
+            # html = html.replace('<tr><td>${fax}</td></tr>'      , fax)
+            # html = html.replace('<tr><td>${autre}</td></tr>'    , autre)
             if html:
                 obj.signature_mail = html
             obj.generer_piece_jointe()
