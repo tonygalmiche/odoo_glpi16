@@ -40,13 +40,14 @@ class is_utilisateur(models.Model):
 
     def get_tr(self,val):
         if val and val!='':
-            val="""
-                <tr>
-                    <td>
-                        <font size="2" color="#939393">%s</font>
-                    </td>
-                </tr>
-            """%val
+            # val="""
+            #     <tr>
+            #         <td>
+            #             <font size="2" color="#939393">%s</font>
+            #         </td>
+            #     </tr>
+            # """%val
+            val="""<font size="2" color="#939393">toto %s</font>"""%val
         else:
             val=''
         return val
@@ -67,14 +68,13 @@ class is_utilisateur(models.Model):
             if fax != '':
                 fax = u'Fax : '+fax
 
-            fonction  = self.get_tr(obj.fonction)
-            telephone = self.get_tr(telephone)
-            portable  = self.get_tr(portable)
-            fax       = self.get_tr(fax)
-            autre     = self.get_tr(obj.autre)
+            # fonction  = self.get_tr(obj.fonction)
+            # telephone = self.get_tr(telephone)
+            # portable  = self.get_tr(portable)
+            # fax       = self.get_tr(fax)
+            # autre     = self.get_tr(obj.autre)
 
 
-            print(fonction)
 
             html = html.replace('${name}'     , (obj.name or ''))
             html = html.replace('${mail}'    , (obj.mail or ''))
