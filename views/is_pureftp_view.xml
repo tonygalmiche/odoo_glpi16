@@ -44,7 +44,7 @@
             <field name="name">Comptes FTP</field>
             <field name="res_model">is.pureftp</field>
             <field name="view_mode">tree,form</field>
-            <field name="limit">200</field>
+            <field name="limit">80</field>
         </record>
         <record id="update_pureftp_action_server" model="ir.actions.server">
              <field name="name">Mise à jour du compte dans Pure-FTP</field>

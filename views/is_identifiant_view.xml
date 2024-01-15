@@ -89,7 +89,7 @@
             <field name="name">Identifiants</field>
             <field name="res_model">is.identifiant</field>
             <field name="view_mode">tree,form</field>
-            <field name="limit">500</field>
+            <field name="limit">80</field>
         </record>
 
         <!-- Envoyer identifiant Bluemind -->

@@ -203,7 +203,7 @@
             <field name="name">Utilisateurs</field>
             <field name="res_model">is.utilisateur</field>
             <field name="view_mode">tree,form</field>
-            <field name="limit">200</field>
+            <field name="limit">80</field>
         </record>
     </data>
 </odoo>
