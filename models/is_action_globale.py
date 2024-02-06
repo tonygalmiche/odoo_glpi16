@@ -83,7 +83,10 @@ class is_action_globale(models.Model):
             else:
                 rows = self.env['is.utilisateur'].search(filtre)
             date=obj.date_prevue_debut
-            mk_debut = datetime.strptime(date, '%Y-%m-%d')
+            #mk_debut = datetime.strptime(date, '%Y-%m-%d')
+            mk_debut = date
+
+
             date_prevue=obj.date_prevue_debut
             days=0.0
             for row in rows:
