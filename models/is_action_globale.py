@@ -46,10 +46,20 @@ class is_action_globale(models.Model):
     action_ids         = fields.One2many('is.action', 'action_globale_id', u'Actions', readonly=True)
 
 
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     for vals in vals_list:
+    #         vals['name'] = self.env['ir.sequence'].next_by_code('is.bl.manuel')
+    #     return super().create(vals_list)
+
+
+
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
-            vals['name'] = self.env['ir.sequence'].next_by_code('"is.action.globale')
+            vals['name'] = self.env['ir.sequence'].next_by_code('is.action.globale')
+        print(vals_list)
         return super().create(vals_list)
 
 
