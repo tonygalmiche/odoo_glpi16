@@ -15,6 +15,7 @@ class is_service(models.Model):
 
 class is_utilisateur(models.Model):
     _name = "is.utilisateur"
+    _inherit=['mail.thread']
     _description = "Utilisateurs"
     _order='site_id,name'
     _sql_constraints = [
@@ -40,14 +41,14 @@ class is_utilisateur(models.Model):
 
     def get_tr(self,val):
         if val and val!='':
-            # val="""
-            #     <tr>
-            #         <td>
-            #             <font size="2" color="#939393">%s</font>
-            #         </td>
-            #     </tr>
-            # """%val
-            val="""<font size="2" color="#939393">toto %s</font>"""%val
+            val="""
+                <tr>
+                    <td>
+                        <font size="2" color="#939393">%s</font>
+                    </td>
+                </tr>
+            """%val
+            #val="""<font size="2" color="#939393">toto %s</font>"""%val
         else:
             val=''
         return val
@@ -57,7 +58,7 @@ class is_utilisateur(models.Model):
         for obj in self:
             if not obj.site_id.signature_mail:
                 raise Warning(u"Signature mail non renseignée pour le site "+obj.site_id.name)
-            html=obj.site_id.signature_mail
+            html=str(obj.site_id.signature_mail)
             telephone = obj.telephone or ''
             portable  = obj.portable or ''
             fax       = obj.fax or ''
@@ -68,33 +69,21 @@ class is_utilisateur(models.Model):
             if fax != '':
                 fax = u'Fax : '+fax
 
-            # fonction  = self.get_tr(obj.fonction)
-            # telephone = self.get_tr(telephone)
-            # portable  = self.get_tr(portable)
-            # fax       = self.get_tr(fax)
-            # autre     = self.get_tr(obj.autre)
-
-
+            fonction  = self.get_tr(obj.fonction)
+            telephone = self.get_tr(telephone)
+            portable  = self.get_tr(portable)
+            fax       = self.get_tr(fax)
+            autre     = self.get_tr(obj.autre)
 
             html = html.replace('${name}'     , (obj.name or ''))
             html = html.replace('${mail}'    , (obj.mail or ''))
 
-            html = html.replace('${fonction}' , (obj.fonction or ''))
-            html = html.replace('${telephone}', (obj.telephone or ''))
-            html = html.replace('${portable}' , (obj.portable or ''))
-            html = html.replace('${fax}'      , (obj.fax or ''))
-            html = html.replace('${autre}'    , (obj.autre or ''))
+            html = html.replace('<tr><td>${fonction}</td></tr>' , fonction)
+            html = html.replace('<tr><td>${telephone}</td></tr>', telephone)
+            html = html.replace('<tr><td>${portable}</td></tr>' , portable)
+            html = html.replace('<tr><td>${fax}</td></tr>'      , fax)
+            html = html.replace('<tr><td>${autre}</td></tr>'    , autre)
 
-
-            # html = html.replace('${fonction}' , (fonction or ''))
-
-
-
-            # html = html.replace('<tr><td>${fonction}</td></tr>' , fonction)
-            # html = html.replace('<tr><td>${telephone}</td></tr>', telephone)
-            # html = html.replace('<tr><td>${portable}</td></tr>' , portable)
-            # html = html.replace('<tr><td>${fax}</td></tr>'      , fax)
-            # html = html.replace('<tr><td>${autre}</td></tr>'    , autre)
             if html:
                 obj.signature_mail = html
             obj.generer_piece_jointe()
