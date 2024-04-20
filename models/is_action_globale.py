@@ -10,7 +10,7 @@ class is_action_globale(models.Model):
     _order='name desc'
 
 
-    @api.depends('action_ids')
+    @api.depends('action_ids','action_ids.date_realisee')
     def _compute_avancement(self):
         for obj in self:
             nb1=len(self.env['is.action'].search([('action_globale_id','=',obj.id),('date_realisee','!=',False)]))
