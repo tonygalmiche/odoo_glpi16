@@ -87,10 +87,17 @@ class is_ordinateur(models.Model):
         glpi_user   = user.company_id.is_glpi_user
         glpi_passwd = user.company_id.is_glpi_passwd
         glpi_db     = user.company_id.is_glpi_db
-        try:
-            db = MySQLdb.connect(host=glpi_host, user=glpi_user, passwd=glpi_passwd, db=glpi_db)
-        except MySQLdb.OperationalError:
-            raise Warning(u"La connexion à GLPI a échouée !")
+        #try:
+        #    db = MySQLdb.connect(host=glpi_host, user=glpi_user, passwd=glpi_passwd, db=glpi_db)
+        #except MySQLdb.OperationalError:
+        #    raise Warning(u"La connexion à GLPI a échouée !")
+        
+
+        print(glpi_host, glpi_user, glpi_passwd,glpi_db)
+
+        db = MySQLdb.connect(host=glpi_host, user=glpi_user, passwd=glpi_passwd, db=glpi_db)
+
+
         cur = db.cursor()
         nb=len(self)
         ct=0
