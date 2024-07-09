@@ -11,7 +11,7 @@
                             <group>
                                 <field name="adresse_ip"      readonly="1"/>
                                 <field name="adresse_mac"     readonly="1"/>
-                                <field name="site_id"         readonly="1"/>
+                                <field name="site_id"/>
                                 <field name="ordinateur_id"/>
                                 <field name="description_arp" readonly="1"/>
                                 <field name="dhcp_hostname"   readonly="1"/>
