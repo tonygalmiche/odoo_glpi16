@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from . import res_users
 from . import is_utilisateur
 from . import is_ordinateur
 from . import is_logiciel
