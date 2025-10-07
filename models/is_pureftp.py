@@ -98,7 +98,7 @@ class is_pureftp(models.Model):
         company = self.env.user.company_id
         serveur_sftp = company.is_serveur_sftp
         for obj in self:
-            cmd="ssh root@%s /opt/pure-pw.sh %s %s"%(serveur_sftp,obj.name,obj.mot_de_passe)
+            cmd="ssh -t root@%s /opt/pure-pw.sh %s %s"%(serveur_sftp,obj.name,obj.mot_de_passe)
             _logger.info(cmd)
             lines=os.popen(cmd).readlines()
             for line in lines:
