@@ -2,6 +2,11 @@
 from odoo import models,fields,api           # type: ignore
 from odoo.exceptions import ValidationError  # type: ignore
 from random import randint
+
+from subprocess import PIPE, Popen
+
+
+
 import re
 import os
 import logging
@@ -99,10 +104,18 @@ class is_pureftp(models.Model):
         serveur_sftp = company.is_serveur_sftp
         for obj in self:
             cmd="ssh -t root@%s /opt/pure-pw.sh %s %s"%(serveur_sftp,obj.name,obj.mot_de_passe)
-            _logger.info(cmd)
-            lines=os.popen(cmd).readlines()
-            for line in lines:
-                _logger.info(line.strip())
+
+            p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+            stdout, stderr = p.communicate()
+            _logger.info("%s => %s"%(cmd,stdout.decode()))
+            if stderr:
+                _logger.info("%s => %s"%(cmd,stderr.decode()))
+
+
+            #_logger.info(cmd)
+            ##lines=os.popen(cmd).readlines()
+            #for line in lines:
+            #    _logger.info(line.strip())
 
 
 
