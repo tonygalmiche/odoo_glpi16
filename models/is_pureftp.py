@@ -103,7 +103,7 @@ class is_pureftp(models.Model):
         company = self.env.user.company_id
         serveur_sftp = company.is_serveur_sftp
         for obj in self:
-            cmd="ssh -tt root@%s /opt/pure-pw.sh %s %s"%(serveur_sftp,obj.name,obj.mot_de_passe)
+            cmd="ssh root@%s /opt/pure-pw.sh %s %s"%(serveur_sftp,obj.name,obj.mot_de_passe)
 
             p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
             stdout, stderr = p.communicate()
