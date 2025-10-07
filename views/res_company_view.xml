@@ -7,12 +7,15 @@
             <field name="inherit_id" ref="base.view_company_form" />
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='general_info']" position="after">
-                    <page string="GLPI">
-                        <group>
+                    <page string="GLPI / SFTP">
+                        <group string="GLPI">
                             <field name="is_glpi_host"/>
                             <field name="is_glpi_db"/>
                             <field name="is_glpi_user"/>
                             <field name="is_glpi_passwd"    password="True"/>
+                        </group>                
+                        <group string="SFTP">
+                            <field name="is_serveur_sftp"/>
                         </group>
                     </page>
                 </xpath>

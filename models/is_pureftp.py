@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models,fields,api           # type: ignore
 from odoo.exceptions import ValidationError  # type: ignore
-
-
-# import datetime
-# from openerp.exceptions import Warning
 from random import randint
 import re
 import os
@@ -81,17 +77,25 @@ class is_pureftp(models.Model):
 
 
     def unlink(self):
-        for obj in self:
-            cmd=u"ssh root@vps541004.ovh.net pure-pw userdel "+obj.name
-            lines=os.popen(cmd).readlines()
-            cmd=u"ssh root@vps541004.ovh.net rm -Rf /PURE-FTP/"+obj.name
-            lines=os.popen(cmd).readlines()
+        company = self.env.user.company_id
+        serveur_sftp = company.is_serveur_sftp
+        if serveur_sftp:
+            for obj in self:
+                cmd="ssh root@%s pure-pw userdel %s "%(serveur_sftp,obj.name)
+                _logger.info(cmd)
+                lines=os.popen(cmd).readlines()
+                cmd=u"ssh root@%s rm -Rf /PURE-FTP/%s"%(serveur_sftp,obj.name)
+                _logger.info(cmd)
+                lines=os.popen(cmd).readlines()
         res=super(is_pureftp, self).unlink()
 
 
     def update_pureftp(self):
+        company = self.env.user.company_id
+        serveur_sftp = company.is_serveur_sftp
         for obj in self:
-            cmd=u"ssh root@vps541004.ovh.net /opt/pure-pw.sh "+obj.name+u" "+obj.mot_de_passe
+            cmd="ssh root@%s /opt/pure-pw.sh %s %s"(serveur_sftp,obj.name,obj.mot_de_passe)
+            _logger.info(cmd)
             lines=os.popen(cmd).readlines()
             for line in lines:
                 _logger.info(line.strip())
