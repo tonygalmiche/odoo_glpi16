@@ -84,9 +84,13 @@ class is_pureftp(models.Model):
                 cmd="ssh root@%s pure-pw userdel %s "%(serveur_sftp,obj.name)
                 _logger.info(cmd)
                 lines=os.popen(cmd).readlines()
+                for line in lines:
+                    _logger.info(line.strip())
                 cmd=u"ssh root@%s rm -Rf /PURE-FTP/%s"%(serveur_sftp,obj.name)
                 _logger.info(cmd)
                 lines=os.popen(cmd).readlines()
+                for line in lines:
+                    _logger.info(line.strip())
         res=super(is_pureftp, self).unlink()
 
 
