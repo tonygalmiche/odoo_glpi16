@@ -52,28 +52,6 @@ class is_pureftp(models.Model):
         return obj
 
 
-    # @api.model
-    # def create(self, vals):
-    #     if vals['mot_de_passe']==False:
-    #         regexp = r"(^[a-z0-9]{3,20})"
-    #         if re.match(regexp, vals['name']) is None:
-    #             raise Warning(u"Le login ne doit contenir que des minuscules et faire entre 4 et 20 caractères !")
-    #         X1=chr(randint(65,90));
-    #         X2=chr(randint(65,90));
-    #         X3=chr(randint(48,57));
-    #         X4=chr(randint(48,57));
-    #         X5=chr(randint(65,90));
-    #         X6=chr(randint(65,90));
-    #         X7=chr(randint(48,57));
-    #         X8=chr(randint(48,57));
-    #         mot_de_passe=X1+X2+X3+X4+X5+X6+X7+X8
-    #         vals['mot_de_passe'] = mot_de_passe
-    #     vals['dossier']  = '/PURE-FTP/'+vals['name']
-    #     obj = super(is_pureftp, self).create(vals)
-    #     obj.update_pureftp()
-    #     return obj
-
-
     def write(self,vals):
         if 'name' in vals or 'mot_de_passe' in vals:
             raise Warning(u"Le login ou le mot de passe ne sont pas modifiable. Il faut supprimer et recréer le compte !")
@@ -86,25 +64,31 @@ class is_pureftp(models.Model):
         serveur_sftp = company.is_serveur_sftp
         if serveur_sftp:
             for obj in self:
-                cmd="ssh root@%s pure-pw userdel %s "%(serveur_sftp,obj.name)
-                _logger.info(cmd)
-                lines=os.popen(cmd).readlines()
-                for line in lines:
-                    _logger.info(line.strip())
-                cmd=u"ssh root@%s rm -Rf /PURE-FTP/%s"%(serveur_sftp,obj.name)
-                _logger.info(cmd)
-                lines=os.popen(cmd).readlines()
-                for line in lines:
-                    _logger.info(line.strip())
+                cmd="ssh root@%s /opt/proftpd.sh delete %s"%(serveur_sftp,obj.name)
+                p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+                stdout, stderr = p.communicate()
+                _logger.info("%s => %s"%(cmd,stdout.decode()))
+                if stderr:
+                    _logger.info("%s => %s"%(cmd,stderr.decode()))
+                # cmd="ssh root@%s pure-pw userdel %s "%(serveur_sftp,obj.name)
+                # _logger.info(cmd)
+                # lines=os.popen(cmd).readlines()
+                # for line in lines:
+                #     _logger.info(line.strip())
+                # cmd=u"ssh root@%s rm -Rf /PURE-FTP/%s"%(serveur_sftp,obj.name)
+                # _logger.info(cmd)
+                # lines=os.popen(cmd).readlines()
+                # for line in lines:
+                #     _logger.info(line.strip())
+
         res=super(is_pureftp, self).unlink()
 
 
-    def update_pureftp(self):
+    def update_proftpd(self):
         company = self.env.user.company_id
         serveur_sftp = company.is_serveur_sftp
         for obj in self:
-            cmd="ssh root@%s /opt/pure-pw.sh %s %s"%(serveur_sftp,obj.name,obj.mot_de_passe)
-
+            cmd="ssh root@%s /opt/proftpd.sh create %s %s"%(serveur_sftp,obj.name,obj.mot_de_passe)
             p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
             stdout, stderr = p.communicate()
             _logger.info("%s => %s"%(cmd,stdout.decode()))
@@ -112,17 +96,9 @@ class is_pureftp(models.Model):
                 _logger.info("%s => %s"%(cmd,stderr.decode()))
 
 
-            #_logger.info(cmd)
-            ##lines=os.popen(cmd).readlines()
-            #for line in lines:
-            #    _logger.info(line.strip())
 
 
-
-
-
-
-
-
+#  /opt/proftpd.sh create gnunux "Eole&123456"
+#  1046  2025-11-04 : 12:56:33 : /opt/proftpd.sh delete gnunux "Eole&123456"
 
 

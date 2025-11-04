@@ -46,12 +46,12 @@
             <field name="view_mode">tree,form</field>
             <field name="limit">80</field>
         </record>
-        <record id="update_pureftp_action_server" model="ir.actions.server">
-             <field name="name">Mise à jour du compte dans Pure-FTP</field>
+        <record id="update_proftpd_action_server" model="ir.actions.server">
+             <field name="name">Mise à jour du compte dans PROFTPD</field>
              <field name="model_id" ref="model_is_pureftp"/>
              <field name="binding_model_id" ref="model_is_pureftp"/>
              <field name="state">code</field>
-             <field name="code">action = records.update_pureftp()</field>
+             <field name="code">action = records.update_proftpd()</field>
         </record>
     </data>
 </odoo>
