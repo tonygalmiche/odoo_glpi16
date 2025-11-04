@@ -70,17 +70,6 @@ class is_pureftp(models.Model):
                 _logger.info("%s => %s"%(cmd,stdout.decode()))
                 if stderr:
                     _logger.info("%s => %s"%(cmd,stderr.decode()))
-                # cmd="ssh root@%s pure-pw userdel %s "%(serveur_sftp,obj.name)
-                # _logger.info(cmd)
-                # lines=os.popen(cmd).readlines()
-                # for line in lines:
-                #     _logger.info(line.strip())
-                # cmd=u"ssh root@%s rm -Rf /PURE-FTP/%s"%(serveur_sftp,obj.name)
-                # _logger.info(cmd)
-                # lines=os.popen(cmd).readlines()
-                # for line in lines:
-                #     _logger.info(line.strip())
-
         res=super(is_pureftp, self).unlink()
 
 
@@ -94,11 +83,5 @@ class is_pureftp(models.Model):
             _logger.info("%s => %s"%(cmd,stdout.decode()))
             if stderr:
                 _logger.info("%s => %s"%(cmd,stderr.decode()))
-
-
-
-
-#  /opt/proftpd.sh create gnunux "Eole&123456"
-#  1046  2025-11-04 : 12:56:33 : /opt/proftpd.sh delete gnunux "Eole&123456"
 
 
