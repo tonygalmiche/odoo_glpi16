@@ -202,20 +202,24 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="GLPI" attrs="{'invisible': [('glpi_name', '=', False)]}">
+
+                             <!-- attrs="{'invisible': [('glpi_nom_ordinateur', '=', False)]}" -->
+                            <page string="GLPI">
                                 <group>
-                                    <field name="glpi_date_mod"/>
-                                    <!-- <field name="glpi_bios_date"/> -->
-                                    <!-- <field name="glpi_installationdate" /> -->
-                                    <field name="glpi_name"/>
-                                    <field name="glpi_remote_addr"/>
-                                    <field name="glpi_adresse_ip_mac"/>
-                                    <!-- <field name="glpi_operatingsystems"/> -->
-                                    <!-- <field name="glpi_contact"/> -->
-                                    <!-- <field name="glpi_winowner"/> -->
-                                    <field name="glpi_serial"/>
-                                    <!-- <field name="glpi_os_license_number"/> -->
-                                    <!-- <field name="glpi_os_licenseid"/> -->
+                                    <field name="glpi_id_ordinateur"/>
+                                    <field name="glpi_nom_ordinateur"/>
+                                    <field name="glpi_numero_serie"/>
+                                    <field name="glpi_fabricant"/>
+                                    <field name="glpi_systeme_exploitation"/>
+                                    <field name="glpi_version_os"/>
+                                    <field name="glpi_version_bios"/>
+                                    <field name="glpi_date_bios"/>
+                                    <field name="glpi_adresses_mac"/>
+                                    <field name="glpi_usager"/>
+                                    <field name="glpi_utilisateur_affecte"/>
+                                    <field name="glpi_adresse_publique"/>
+                                    <field name="glpi_version_agent"/>
+                                    <field name="glpi_dernier_contact"/>
                                 </group>
                             </page>
 
@@ -242,18 +246,25 @@
                 <tree>
                     <field name="site_id" />
                     <field name="name" />
-                    <field name="type_ordinateur_id" />
-                    <field name="glpi_remote_addr"/>
-                    <field name="bureau_id" />
-                    <field name="service_id" />
-                    <field name="utilisateur_id" />
-                    <field name="glpi_date_mod"/>
-                    <!-- <field name="date_achat" /> -->
-                    <!-- <field name="glpi_bios_date" /> -->
-                    <!-- <field name="glpi_installationdate" /> -->
-                    <!-- <field name="glpi_operatingsystems"/> -->
-                    <!-- <field name="glpi_winowner"/> -->
-                    <field name="commentaire" invisible="context.get('commentaire',True)"/>
+                    <field name="type_ordinateur_id"  optional="show"/>
+                    <field name="bureau_id"  optional="show"/>
+                    <field name="service_id"  optional="show"/>
+                    <field name="utilisateur_id"  optional="show"/>
+                    <field name="glpi_adresse_publique" optional="hide"/>
+                    <field name="glpi_dernier_contact" optional="hide"/>
+                    <field name="glpi_systeme_exploitation" optional="hide"/>
+                    <field name="glpi_id_ordinateur" optional="hide"/>
+                    <field name="glpi_nom_ordinateur" optional="hide"/>
+                    <field name="glpi_numero_serie" optional="hide"/>
+                    <field name="glpi_fabricant" optional="hide"/>
+                    <field name="glpi_version_os" optional="hide"/>
+                    <field name="glpi_version_bios" optional="hide"/>
+                    <field name="glpi_date_bios" optional="hide"/>
+                    <field name="glpi_adresses_mac" optional="hide"/>
+                    <field name="glpi_usager" optional="hide"/>
+                    <field name="glpi_utilisateur_affecte" optional="hide"/>
+                    <field name="glpi_version_agent" optional="hide"/>
+                    <field name="commentaire" optional="hide"/>
                 </tree>
             </field>
         </record>
@@ -273,7 +284,7 @@
                     <filter string="Type d'ordinateur" name="group_by_type_ordinateur_id"     context="{'group_by':'type_ordinateur_id'}"/>
                     <filter string="Bureau"            name="group_by_bureau_id"              context="{'group_by':'bureau_id'}"/>
                     <filter string="Service"           name="group_by_service_id"             context="{'group_by':'service_id'}"/>
-                    <filter string="Système"           name="group_by_glpi_operatingsystems"  context="{'group_by':'glpi_operatingsystems'}"/>
+                    <filter string="Système"           name="group_by_glpi_systeme_exploitation"  context="{'group_by':'glpi_systeme_exploitation'}"/>
                  </search>
             </field>
         </record>
