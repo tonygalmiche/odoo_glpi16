@@ -26,6 +26,7 @@
         <menuitem id="is_bureau_menu"            sequence="30" name="Bureaux"            parent="is_tables_menu" action="is_bureau_action" />
         <menuitem id="is_service_menu"           sequence="40" name="Services"           parent="is_tables_menu" action="is_service_action" />
         <menuitem id="is_partage_menu"           sequence="50" name="Partages Windows"   parent="is_tables_menu" action="is_partage_action" />
+        <menuitem id="is_port_menu"              sequence="60" name="Ports réseau"        parent="is_tables_menu" action="is_port_action" />
 
         <!-- Déplacement des menus standard pour les masquer -->
         <!-- <menuitem id="mail.mail_feeds_main"      sequence="90" name="Messagerie"         parent="base.menu_custom"/> -->

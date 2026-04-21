@@ -17,6 +17,9 @@
                         <group string="SFTP">
                             <field name="is_serveur_sftp"/>
                         </group>
+                        <group string="Autre">
+                            <field name="is_dossier_destination"/>
+                        </group>
                     </page>
                 </xpath>
             </field>

@@ -8,7 +8,8 @@ class res_company(models.Model):
     is_glpi_user    = fields.Char('User GLPI')
     is_glpi_passwd  = fields.Char('Mot de passe GLPI')
     is_glpi_db      = fields.Char('Base GLPI')
-    is_serveur_sftp = fields.Char('Serveur SFTP (pure-ftp)')
+    is_serveur_sftp         = fields.Char('Serveur SFTP (pure-ftp)')
+    is_dossier_destination  = fields.Char('Dossier de destination')
 
 
 

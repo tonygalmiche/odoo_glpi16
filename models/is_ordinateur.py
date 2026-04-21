@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models,fields,api
 import MySQLdb
+import json
+import os
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -32,6 +34,20 @@ class is_type_ordinateur(models.Model):
     commentaire     = fields.Text('Commentaire')
 
 
+class is_port(models.Model):
+    _name = "is.port"
+    _description = "Ports réseau"
+    _order = 'name'
+
+    name         = fields.Char('Nom du port', required=True)
+    type_port    = fields.Selection([
+        ('tcp',  'TCP'),
+        ('udp',  'UDP'),
+        ('icmp', 'ICMP'),
+    ], string='Type de port', required=True)
+    numero_port  = fields.Integer('Numéro du port')
+
+
 class is_ordinateur(models.Model):
     _name = "is.ordinateur"
     _description = "Ordinateurs"
@@ -60,6 +76,7 @@ class is_ordinateur(models.Model):
     suivi_sauvegarde_ids = fields.One2many('is.suivi.sauvegarde', 'ordinateur_id', u'Suivi des sauvegardes', readonly=True)
     suivi_sauvegarde_nb  = fields.Integer('Nb suivi sauvegarde', compute='_compute', readonly=True, store=False)
     active               = fields.Boolean('Actif', default=True)
+    port_ids             = fields.Many2many('is.port', 'is_ordinateur_port_rel', 'ordinateur_id', 'port_id', string='Ports')
 
     glpi_id_ordinateur           = fields.Integer('ID ordinateur GLPI', readonly=True)
     glpi_nom_ordinateur          = fields.Char('Nom ordinateur GLPI', readonly=True)
@@ -170,6 +187,31 @@ class is_ordinateur(models.Model):
         ordinateurs=self.env['is.ordinateur'].search([])
         ordinateurs.actualiser_glpi_action()
         _logger.info("## Actualisation depuis GLPI - Fin")
+
+
+    def exporter_ports_json_scheduler(self):
+        _logger.info("## Export ports JSON - Début")
+        company = self.env.company
+        dossier = company.is_dossier_destination
+        if not dossier:
+            _logger.warning("Export ports JSON : dossier de destination non configuré")
+            return
+        ordinateurs = self.env['is.ordinateur'].search([])
+        data = []
+        for ordi in ordinateurs:
+            if not ordi.port_ids:
+                continue
+            ports = [{'nom': p.name, 'type': p.type_port, 'numero': p.numero_port} for p in ordi.port_ids]
+            ports_log = ', '.join('%s(%s/%s)' % (p['nom'], p['numero'], p['type']) for p in ports)
+            _logger.info("  %s : %s", ordi.name, ports_log)
+            data.append({
+                'nom_poste': ordi.name,
+                'ports': ports,
+            })
+        filepath = os.path.join(dossier, 'ports_ordinateurs.json')
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+        _logger.info("## Export ports JSON - Fin : %s", filepath)
 
 
 
