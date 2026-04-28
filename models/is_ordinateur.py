@@ -214,6 +214,7 @@ class is_ordinateur(models.Model):
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
         _logger.info("## Export ports JSON - Fin : %s", filepath)
+        return filepath
 
 
 
