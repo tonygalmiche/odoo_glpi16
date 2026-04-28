@@ -317,6 +317,7 @@
                     <field name="glpi_version_agent" optional="hide"/>
                     <field name="commentaire" optional="hide"/>
                     <field name="test_vlan" optional="hide"/>
+                    <field name="port_ids" widget="many2many_tags" optional="hide"/>
                     <field name="create_date" optional="hide"/>
                     <field name="create_uid" optional="hide"/>
                     <field name="write_date" optional="hide"/>
