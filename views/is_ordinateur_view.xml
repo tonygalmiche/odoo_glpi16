@@ -350,6 +350,7 @@
             <field name="name">Ordinateurs</field>
             <field name="res_model">is.ordinateur</field>
             <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'tree', 'view_id': ref('is_ordinateur_tree_view')}), (0, 0, {'view_mode': 'form', 'view_id': ref('is_ordinateur_form_view')})]"/>
             <field name="limit">80</field>
         </record>
 
@@ -366,6 +367,8 @@
                     <field name="type_ordinateur_id" />
                     <field name="test_vlan" />
                     <field name="port_ids" widget="many2many_tags"/>
+                    <field name="glpi_adresse_publique"/>
+                    <field name="glpi_dernier_contact" optional="hide"/>
                     <field name="create_date" optional="hide"/>
                     <field name="create_uid" optional="hide"/>
                     <field name="write_date" optional="hide"/>
