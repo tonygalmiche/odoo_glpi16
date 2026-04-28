@@ -34,7 +34,7 @@ def _load_services_from_json(path):
     Format attendu :
         [{"nom_poste": "vm-ldap", "ports": [{"nom": "ssh", "type": "tcp", "numero": 22}]}]
 
-    Retourne une liste de tuples (host, port, proto) ou None si le fichier
+    Retourne une liste de tuples (host, port, proto, nom) ou None si le fichier
     est absent, vide ou mal formé.
     """
     try:
@@ -56,8 +56,9 @@ def _load_services_from_json(path):
                 if isinstance(p, dict):
                     port_num = p.get('numero')
                     proto = str(p.get('type', 'tcp')).strip().lower()
+                    nom = str(p.get('nom', '')).strip().lower()
                     if port_num is not None:
-                        services.append((host, str(port_num), proto))
+                        services.append((host, str(port_num), proto, nom))
         return services if services else None
     except (OSError, json.JSONDecodeError, KeyError, ValueError):
         return None
@@ -71,14 +72,39 @@ else:
     _cfg = importlib.import_module("test-vlan-config")
     SERVICES = _cfg.SERVICES
 
+# Filtre sur les ports passé en argument (--filtre-port ssh,https)
+import argparse as _argparse
+_parser = _argparse.ArgumentParser(add_help=False)
+_parser.add_argument('--filtre-port', default=None)
+_parser.add_argument('--filtre-statut', default=None)
+_parser.add_argument('--vlan', default=None)
+_parser.add_argument('--host', default=None)
+_parser.add_argument('--index', type=int, default=None)
+_parser.add_argument('--total', type=int, default=None)
+_parser.add_argument('--debug', action='store_true')
+_args, _ = _parser.parse_known_args()
+if _args.filtre_port:
+    _termes = [t.strip().lower() for t in _args.filtre_port.split(',') if t.strip()]
+    SERVICES = [
+        (h, p, proto, nom) for h, p, proto, nom in SERVICES
+        if any(t in nom for t in _termes)
+           or any(t in p for t in _termes)
+    ]
+
 
 TIMEOUT = 5
 DNS_SUFFIX = '.gray.plastigray.com'
 
 
 def name_to_ip(hostname):
-    n = dns.name.from_text(hostname + DNS_SUFFIX)
-    answer = dns.resolver.resolve(n, 'A')
+    # Si le hostname contient déjà un point, on le considère comme un FQDN
+    if '.' in hostname:
+        n = dns.name.from_text(hostname)
+    else:
+        n = dns.name.from_text(hostname + DNS_SUFFIX)
+    # resolve() existe depuis dnspython 2.0 ; query() pour les versions antérieures
+    _resolve = getattr(dns.resolver, 'resolve', None) or dns.resolver.query
+    answer = _resolve(n, 'A')
     return next(iter(answer)).to_text()
 
 
@@ -189,15 +215,17 @@ def get_source_ip():
 
 
 async def main():
-    services = [check_port(hostname, port, proto) for hostname, port, proto in SERVICES]
+    if not SERVICES:
+        print("Aucun service à tester (liste vide après filtrage).")
+        return
+
+    services = [check_port(hostname, port, proto) for hostname, port, proto, nom in SERVICES]
     ret = await asyncio.gather(
             *services
     )
 
     # Adresse IP source
     src_ip = get_source_ip()
-    print(f"IP source : {src_ip}")
-    print()
 
     STATUS_ICONS = {
         'open':    '✅ open',
@@ -205,6 +233,14 @@ async def main():
         'timeout': '⌛ timeout',
         'unknown': '❓ unknown',
     }
+
+    # Filtre sur le statut
+    if _args.filtre_statut:
+        _statuts = [s.strip().lower() for s in _args.filtre_statut.split(',') if s.strip()]
+        ret = [r for r in ret if r[4] in _statuts]
+        if not ret:
+            print("Aucun résultat correspondant au filtre statut.")
+            return
 
     # Calcul des largeurs de colonnes (en tenant compte des caractères larges)
     col_host  = max(_dw('Hôte'),   max(_dw(d[0]) for d in ret))
@@ -215,7 +251,18 @@ async def main():
 
     sep  = f"+{'-'*(col_host+2)}+{'-'*(col_ip+2)}+{'-'*(col_port+2)}+{'-'*(col_proto+2)}+{'-'*(col_stat+2)}+"
     head = f"| {_pad('Hôte', col_host)} | {_pad('IP', col_ip)} | {_pad('Port', col_port)} | {_pad('Proto', col_proto)} | {_pad('Statut', col_stat)} |"
+    titre_parts = []
+    if _args.index is not None and _args.total is not None:
+        titre_parts.append(f"{_args.index}/{_args.total}")
+    if _args.vlan:
+        titre_parts.append(_args.vlan)
+    if _args.host:
+        titre_parts.append(_args.host)
+    titre_parts.append(f"IP source : {src_ip}")
+    titre = '  |  '.join(titre_parts)
 
+    print()
+    print(titre)
     print(sep)
     print(head)
     print(sep)
@@ -240,5 +287,6 @@ if __name__ ==  '__main__':
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(main())
-    print()
-    print("Temps d'exécution :", time() - ori_time)
+    if _args.debug:
+        print(f"Temps d'exécution : {time() - ori_time:.1f}s")
+        print()

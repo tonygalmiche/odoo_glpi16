@@ -44,13 +44,14 @@ def odoo_connect(url, db, user, password):
     return uid, models_proxy
 
 
-def exporter_et_recuperer_ports_json(url, db, user, password, ssh_user):
+def exporter_et_recuperer_ports_json(url, db, user, password, ssh_user, debug=False):
     """Déclenche l'export ports JSON sur le serveur Odoo, récupère le fichier
     via SCP et le dépose dans PORTS_JSON."""
     uid, models_proxy = odoo_connect(url, db, user, password)
 
     # 1. Déclencher l'export sur le serveur Odoo
-    print("Déclenchement de exporter_ports_json_scheduler sur Odoo...")
+    if debug:
+        print("Déclenchement de exporter_ports_json_scheduler sur Odoo...")
     models_proxy.execute_kw(db, uid, password, 'is.ordinateur', 'exporter_ports_json_scheduler', [[]])
 
     # 2. Récupérer le dossier de destination depuis res.company
@@ -68,22 +69,27 @@ def exporter_et_recuperer_ports_json(url, db, user, password, ssh_user):
     # 3. SCP depuis le serveur Odoo vers local
     hostname = urllib.parse.urlparse(url).hostname
     remote_src = f"{ssh_user}@{hostname}:{dossier}/ports_ordinateurs.json"
-    print(f"  SCP  {remote_src}  →  {PORTS_JSON}")
+    if debug:
+        print(f"  SCP  {remote_src}  →  {PORTS_JSON}")
     result = subprocess.run(['scp', '-q', '-o', 'StrictHostKeyChecking=no', remote_src, PORTS_JSON])
     if result.returncode != 0:
         print(f"  [ERREUR] Impossible de récupérer ports_ordinateurs.json depuis {hostname}", file=sys.stderr)
         sys.exit(1)
-    print(f"  ports_ordinateurs.json récupéré dans {PORTS_JSON}")
+    if debug:
+        print(f"  ports_ordinateurs.json récupéré dans {PORTS_JSON}")
 
 
-def get_vlans_from_odoo(url, db, user, password, filtre=None):
+def get_vlans_from_odoo(url, db, user, password, filtre=None, filtre_vlan=None):
     """Récupère depuis Odoo la liste (test_vlan, 'login@name') pour tous les
     is.ordinateur dont le champ test_vlan est renseigné.
-    Si filtre est fourni, seuls les postes dont le nom contient cette chaîne sont retenus."""
+    Si filtre est fourni, seuls les postes dont le nom contient cette chaîne sont retenus.
+    Si filtre_vlan est fourni, seuls les postes dont le VLAN contient cette chaîne sont retenus."""
     uid, models = odoo_connect(url, db, user, password)
     domain = [['test_vlan', '!=', False]]
     if filtre:
         domain.append(['name', 'ilike', filtre])
+    if filtre_vlan:
+        domain.append(['test_vlan', 'ilike', filtre_vlan])
     records = models.execute_kw(
         db, uid, password,
         'is.ordinateur', 'search_read',
@@ -112,20 +118,22 @@ def get_vlans_from_odoo(url, db, user, password, filtre=None):
     return vlans
 
 
-def scp(local_path, remote_target):
+def scp(local_path, remote_target, debug=False):
     """Copie un fichier local vers remote_target (user@host:/chemin)."""
     cmd = ['scp', '-q', local_path, remote_target]
-    print(f"  SCP  {local_path}  →  {remote_target}")
+    if debug:
+        print(f"  SCP  {local_path}  →  {remote_target}")
     result = subprocess.run(cmd)
     if result.returncode != 0:
         print(f"  [ERREUR] scp a échoué (code {result.returncode})", file=sys.stderr)
     return result.returncode == 0
 
 
-def ssh_run(user_host, remote_cmd):
+def ssh_run(user_host, remote_cmd, debug=False):
     """Exécute une commande sur le poste distant via SSH."""
     cmd = ['ssh', '-o', 'StrictHostKeyChecking=no', user_host, remote_cmd]
-    print(f"  SSH  {user_host}  »  {remote_cmd}")
+    if debug:
+        print(f"  SSH  {user_host}  »  {remote_cmd}")
     result = subprocess.run(cmd)
     if result.returncode != 0:
         print(f"  [ERREUR] ssh a échoué (code {result.returncode})", file=sys.stderr)
@@ -136,6 +144,14 @@ def main():
     parser = argparse.ArgumentParser(description='Déploie test-vlan.py sur les postes Odoo.')
     parser.add_argument('--filtre', metavar='TEXTE', default=None,
                         help='Filtrer les postes dont le nom contient TEXTE (insensible à la casse)')
+    parser.add_argument('--filtre-vlan', metavar='VLAN', default=None,
+                        help='Filtrer les postes dont le VLAN contient VLAN (insensible à la casse)')
+    parser.add_argument('--filtre-port', metavar='PORT,...', default=None,
+                        help='Tester uniquement les ports dont le nom contient un des termes (ex: ssh,https)')
+    parser.add_argument('--filtre-statut', metavar='STATUT,...', default=None,
+                        help='Afficher uniquement les lignes avec ce statut (ex: timeout,close)')
+    parser.add_argument('--debug', action='store_true',
+                        help='Afficher les commandes SCP et SSH exécutées')
     args = parser.parse_args()
 
     # Import dynamique de test-vlan-config pour récupérer les paramètres Odoo
@@ -148,45 +164,48 @@ def main():
     odoo_password = getattr(cfg, 'ODOO_PASSWORD', None)
     odoo_ssh_user = getattr(cfg, 'ODOO_SSH_USER', 'odoo')
 
-    if all([odoo_url, odoo_db, odoo_user, odoo_password]):
-        # Export et récupération du fichier ports JSON depuis le serveur Odoo
-        exporter_et_recuperer_ports_json(odoo_url, odoo_db, odoo_user, odoo_password, odoo_ssh_user)
+    if not all([odoo_url, odoo_db, odoo_user, odoo_password]):
+        print("[ERREUR] Paramètres Odoo non configurés dans test-vlan-config.py.", file=sys.stderr)
+        sys.exit(1)
 
-        filtre_msg = f" (filtre : '{args.filtre}')" if args.filtre else ''
-        print(f"Récupération des postes depuis Odoo (is.ordinateur, test_vlan renseigné){filtre_msg}...")
-        vlans = get_vlans_from_odoo(odoo_url, odoo_db, odoo_user, odoo_password, filtre=args.filtre)
-        if vlans:
-            print(f"{len(vlans)} poste(s) trouvé(s) dans Odoo.")
-        else:
-            print("Aucun poste avec test_vlan renseigné dans Odoo, repli sur VLANS statique.")
-            vlans = getattr(cfg, 'VLANS', [])
-    else:
-        print("Paramètres Odoo non configurés, utilisation de VLANS statique.")
-        vlans = getattr(cfg, 'VLANS', [])
+    # Export et récupération du fichier ports JSON depuis le serveur Odoo
+    exporter_et_recuperer_ports_json(odoo_url, odoo_db, odoo_user, odoo_password, odoo_ssh_user, debug=args.debug)
 
+    filtre_msg = ''
+    if args.filtre:
+        filtre_msg += f" (filtre poste : '{args.filtre}')"
+    if args.filtre_vlan:
+        filtre_msg += f" (filtre VLAN : '{args.filtre_vlan}')"
+    print(f"Récupération des postes depuis Odoo (is.ordinateur, test_vlan renseigné){filtre_msg}...")
+    vlans = get_vlans_from_odoo(odoo_url, odoo_db, odoo_user, odoo_password, filtre=args.filtre, filtre_vlan=args.filtre_vlan)
     if not vlans:
-        print("Aucun VLAN défini.")
+        print("Aucun poste avec test_vlan renseigné dans Odoo.")
         sys.exit(0)
+    print(f"{len(vlans)} poste(s) trouvé(s) dans Odoo.")
 
-    for vlan_name, user_host in vlans:
-        print(f"\n{'='*60}")
-        print(f"VLAN : {vlan_name}  ({user_host})")
-        print(f"{'='*60}")
-
+    for idx, (vlan_name, user_host) in enumerate(vlans, 1):
+        total = len(vlans)
         # 1. Copie de test-vlan.py
-        scp(VLAN_SCRIPT, f"{user_host}:{REMOTE_DIR}/")
+        scp(VLAN_SCRIPT, f"{user_host}:{REMOTE_DIR}/", debug=args.debug)
 
         # 2. Copie de test-vlan-config.py
-        scp(VLAN_CONFIG, f"{user_host}:{REMOTE_DIR}/")
+        scp(VLAN_CONFIG, f"{user_host}:{REMOTE_DIR}/", debug=args.debug)
 
         # 3. Copie de ports_ordinateurs.json (si disponible)
         if os.path.exists(PORTS_JSON):
-            scp(PORTS_JSON, f"{user_host}:{REMOTE_DIR}/")
+            scp(PORTS_JSON, f"{user_host}:{REMOTE_DIR}/", debug=args.debug)
         else:
             print(f"  [AVERTISSEMENT] {PORTS_JSON} introuvable, ignoré.")
 
         # 4. Exécution distante
-        ssh_run(user_host, f"python3 {REMOTE_DIR}/test-vlan.py")
+        remote_cmd = f"python3 {REMOTE_DIR}/test-vlan.py --vlan {vlan_name!r} --host {user_host!r} --index {idx} --total {total}"
+        if args.filtre_port:
+            remote_cmd += f" --filtre-port {args.filtre_port}"
+        if args.filtre_statut:
+            remote_cmd += f" --filtre-statut {args.filtre_statut}"
+        if args.debug:
+            remote_cmd += " --debug"
+        ssh_run(user_host, remote_cmd, debug=args.debug)
 
 
 if __name__ == '__main__':
