@@ -17,7 +17,7 @@ access_is_pureftp,access_is_pureftp,model_is_pureftp,base.group_user,1,1,1,0
 access_is_logiciel,access_is_logiciel,model_is_logiciel,base.group_user,1,1,1,1
 access_is_port,access_is_port,model_is_port,base.group_user,1,1,1,0
 
-access_is_ordinateur_admin,access_is_ordinateur_admin,model_is_ordinateur,base.group_system,1,1,1,1
+access_is_ordinateur_admin,access_is_ordinateur_admin,model_is_ordinateur,base.group_system,1,1,1,0
 access_is_utilisateur_admin,access_is_utilisateur_admin,model_is_utilisateur,base.group_system,1,1,1,1
 access_is_action_admin,access_is_action_admin,model_is_action,base.group_system,1,1,1,1
 access_is_action_globale_admin,access_is_action_globale_admin,model_is_action_globale,base.group_system,1,1,1,1

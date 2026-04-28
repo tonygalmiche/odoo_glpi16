@@ -194,6 +194,8 @@
                         />
                     </header> -->
                     <sheet class="oe_form_sheet_width_wider">
+                        <field name="active" invisible="1"/>
+                        <widget name="web_ribbon" title="Archivé" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
                         <group>
                             <group>
                                 <field name="site_id" />
@@ -207,6 +209,7 @@
                             <group>
                                 <field name="partage_ids"  widget="many2many_tags"/>
                                 <field name="port_ids"    widget="many2many_tags"/>
+                                <field name="test_vlan" />
                                 <field name="partage_nb"          invisible="1"/>
                                 <field name="suivi_sauvegarde_nb" invisible="1"/>
                             </group>
@@ -278,10 +281,11 @@
                                 </group>
                             </page>
                         </notebook>
-                        <group>
-                            <field name="active"/>
-                        </group>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                </form>
             </field>
         </record>
@@ -312,6 +316,11 @@
                     <field name="glpi_utilisateur_affecte" optional="hide"/>
                     <field name="glpi_version_agent" optional="hide"/>
                     <field name="commentaire" optional="hide"/>
+                    <field name="test_vlan" optional="hide"/>
+                    <field name="create_date" optional="hide"/>
+                    <field name="create_uid" optional="hide"/>
+                    <field name="write_date" optional="hide"/>
+                    <field name="write_uid" optional="hide"/>
                 </tree>
             </field>
         </record>
@@ -327,6 +336,8 @@
                     <field name="service_id" />
                     <field name="utilisateur_id" />
                     <field name="commentaire" />
+                    <filter string="Test VLAN" name="filter_test_vlan" domain="['|', ('test_vlan', '!=', False), ('test_vlan', '!=', '')]"/>
+                    <filter string="Ports est défini" name="filter_port_ids" domain="[('port_ids', '!=', False)]"/>
                     <filter string="Site"              name="group_by_site_id"                context="{'group_by':'site_id'}"/>
                     <filter string="Type d'ordinateur" name="group_by_type_ordinateur_id"     context="{'group_by':'type_ordinateur_id'}"/>
                     <filter string="Bureau"            name="group_by_bureau_id"              context="{'group_by':'bureau_id'}"/>
@@ -339,6 +350,35 @@
             <field name="name">Ordinateurs</field>
             <field name="res_model">is.ordinateur</field>
             <field name="view_mode">tree,form</field>
+            <field name="limit">80</field>
+        </record>
+
+
+        <!-- Ordinateurs Test VLAN -->
+        <record model="ir.ui.view" id="is_ordinateur_test_vlan_tree_view">
+            <field name="name">is_ordinateur_test_vlan_tree_view</field>
+            <field name="model">is.ordinateur</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="site_id" />
+                    <field name="name" />
+                    <field name="type_ordinateur_id" />
+                    <field name="test_vlan" />
+                    <field name="port_ids" widget="many2many_tags"/>
+                    <field name="create_date" optional="hide"/>
+                    <field name="create_uid" optional="hide"/>
+                    <field name="write_date" optional="hide"/>
+                    <field name="write_uid" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+        <record id="is_ordinateur_test_vlan_action" model="ir.actions.act_window">
+            <field name="name">Ordinateurs (Test VLAN)</field>
+            <field name="res_model">is.ordinateur</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">['|', ('test_vlan', 'not in', [False, '']), ('port_ids', '!=', False)]</field>
+            <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'tree', 'view_id': ref('is_ordinateur_test_vlan_tree_view')}), (0, 0, {'view_mode': 'form', 'view_id': ref('is_ordinateur_form_view')})]"/>
             <field name="limit">80</field>
         </record>
 

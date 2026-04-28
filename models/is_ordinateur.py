@@ -51,6 +51,7 @@ class is_port(models.Model):
 class is_ordinateur(models.Model):
     _name = "is.ordinateur"
     _description = "Ordinateurs"
+    _inherit = ['mail.thread']
     _order='name'
 
     _sql_constraints = [('name_uniq','UNIQUE(name)', 'Ce code existe déjà')] 
@@ -61,41 +62,42 @@ class is_ordinateur(models.Model):
             obj.suivi_sauvegarde_nb = len(obj.suivi_sauvegarde_ids)
 
 
-    site_id              = fields.Many2one('is.site', 'Site', required=True)
-    name                 = fields.Char('Nom du poste', required=True)
-    type_ordinateur_id   = fields.Many2one('is.type.ordinateur', "Type d'ordinateur")
-    bureau_id            = fields.Many2one('is.bureau', 'Bureau')
-    service_id           = fields.Many2one('is.service', 'Service')
-    utilisateur_id       = fields.Many2one('is.utilisateur', 'Utilisateur')
-    date_achat           = fields.Date("Date d'achat")
+    site_id              = fields.Many2one('is.site', 'Site', required=True, tracking=True)
+    name                 = fields.Char('Nom du poste', required=True, tracking=True)
+    type_ordinateur_id   = fields.Many2one('is.type.ordinateur', "Type d'ordinateur", tracking=True)
+    bureau_id            = fields.Many2one('is.bureau', 'Bureau', tracking=True)
+    service_id           = fields.Many2one('is.service', 'Service', tracking=True)
+    utilisateur_id       = fields.Many2one('is.utilisateur', 'Utilisateur', tracking=True)
+    date_achat           = fields.Date("Date d'achat", tracking=True)
     partage_ids          = fields.Many2many('is.partage' , 'is_ordinateur_partage_rel' , 'ordinateur_id','partage_id' , string="Partages", help=u"Ce champ est utilisé par le programme de sauvegarde des messageries" )
     partage_nb           = fields.Integer('Nombre de partages', compute='_compute', readonly=True, store=False)
-    commentaire          = fields.Text('Commentaire')
+    commentaire          = fields.Text('Commentaire', tracking=True)
     action_ids           = fields.One2many('is.action', 'ordinateur_id', u'Actions', readonly=True)
     sauvegarde_ids       = fields.One2many('is.save.mozilla', 'ordinateur_id', u'Sauvegardes', readonly=True)
     suivi_sauvegarde_ids = fields.One2many('is.suivi.sauvegarde', 'ordinateur_id', u'Suivi des sauvegardes', readonly=True)
     suivi_sauvegarde_nb  = fields.Integer('Nb suivi sauvegarde', compute='_compute', readonly=True, store=False)
-    active               = fields.Boolean('Actif', default=True)
+    active               = fields.Boolean('Actif', default=True, tracking=True)
+    test_vlan            = fields.Char('VLAN', help="Poste servant au test des VLAN. Indiquer le VLAN sur lequel il est (ex : VLAN 30 Gray)", tracking=True)
     port_ids             = fields.Many2many('is.port', 'is_ordinateur_port_rel', 'ordinateur_id', 'port_id', string='Ports')
 
-    glpi_id_ordinateur           = fields.Integer('ID ordinateur GLPI', readonly=True)
-    glpi_nom_ordinateur          = fields.Char('Nom ordinateur GLPI', readonly=True)
-    glpi_numero_serie            = fields.Char('N° série', readonly=True)
-    glpi_fabricant               = fields.Char('Fabricant', readonly=True)
-    glpi_systeme_exploitation    = fields.Char('Système exploitation', readonly=True)
-    glpi_version_os              = fields.Char('Version OS', readonly=True)
-    glpi_version_bios            = fields.Char('Version BIOS', readonly=True)
-    glpi_date_bios               = fields.Date('Date BIOS', readonly=True)
-    glpi_adresses_mac            = fields.Char('Adresses MAC', readonly=True)
-    glpi_usager                  = fields.Char('Usager', readonly=True)
-    glpi_utilisateur_affecte     = fields.Char('Utilisateur affecté', readonly=True)
-    glpi_adresse_publique        = fields.Char('Adresse publique', readonly=True)
-    glpi_version_agent           = fields.Char('Version agent', readonly=True)
-    glpi_dernier_contact         = fields.Datetime('Dernier contact', readonly=True)
+    glpi_id_ordinateur           = fields.Integer('ID ordinateur GLPI', readonly=True, tracking=True)
+    glpi_nom_ordinateur          = fields.Char('Nom ordinateur GLPI', readonly=True, tracking=True)
+    glpi_numero_serie            = fields.Char('N° série', readonly=True, tracking=True)
+    glpi_fabricant               = fields.Char('Fabricant', readonly=True, tracking=True)
+    glpi_systeme_exploitation    = fields.Char('Système exploitation', readonly=True, tracking=True)
+    glpi_version_os              = fields.Char('Version OS', readonly=True, tracking=True)
+    glpi_version_bios            = fields.Char('Version BIOS', readonly=True, tracking=True)
+    glpi_date_bios               = fields.Date('Date BIOS', readonly=True, tracking=True)
+    glpi_adresses_mac            = fields.Char('Adresses MAC', readonly=True, tracking=True)
+    glpi_usager                  = fields.Char('Usager', readonly=True, tracking=True)
+    glpi_utilisateur_affecte     = fields.Char('Utilisateur affecté', readonly=True, tracking=True)
+    glpi_adresse_publique        = fields.Char('Adresse publique', readonly=True, tracking=True)
+    glpi_version_agent           = fields.Char('Version agent', readonly=True, tracking=True)
+    glpi_dernier_contact         = fields.Datetime('Dernier contact', readonly=True, tracking=True)
 
-    net_rpc_users          = fields.Char('net rpc users'   , readonly=True)
-    net_rpc_admins         = fields.Char('net rpc admins'  , readonly=True)
-    net_rpc_partages       = fields.Char('net rpc partages', readonly=True)
+    net_rpc_users          = fields.Char('net rpc users'   , readonly=True, tracking=True)
+    net_rpc_admins         = fields.Char('net rpc admins'  , readonly=True, tracking=True)
+    net_rpc_partages       = fields.Char('net rpc partages', readonly=True, tracking=True)
 
 
     def actualiser_glpi_action(self):

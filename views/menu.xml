@@ -6,6 +6,7 @@
         <menuitem id="is_glpi_menu"              sequence="10" name="GLPI"               parent="is_glpi_main_menu"/>
         <menuitem id="is_utilisateur_menu"       sequence="10" name="Utilisateurs"       parent="is_glpi_menu" action="is_utilisateur_action" />
         <menuitem id="is_ordinateur_menu"        sequence="20" name="Ordinateurs"        parent="is_glpi_menu" action="is_ordinateur_action" />
+        <menuitem id="is_ordinateur_test_vlan_menu" sequence="21" name="Ordinateurs (Test VLAN)" parent="is_glpi_menu" action="is_ordinateur_test_vlan_action" />
         <menuitem id="is_logiciel_menu"          sequence="25" name="Logiciels"          parent="is_glpi_menu" action="is_logiciel_action" />
         <menuitem id="is_equipement_reseau_menu" sequence="30" name="Equipement réseau"  parent="is_glpi_menu" action="is_equipement_reseau_action" />
         <menuitem id="is_action_menu"            sequence="40" name="Actions"            parent="is_glpi_menu" action="is_action_action" />
